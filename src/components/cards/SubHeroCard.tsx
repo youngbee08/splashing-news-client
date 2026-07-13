@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { Post } from "../../types/generalTypes";
 
 interface SubHeroCardProps {
@@ -6,7 +7,10 @@ interface SubHeroCardProps {
 
 const SubHeroCard = ({ post }: SubHeroCardProps) => {
   return (
-    <div className="group flex flex-col bg-white border border-neutral-200 rounded-lg overflow-hidden shadow-xs cursor-pointer hover:shadow-md transition-shadow duration-300">
+    <Link
+      to={`/post/${post.slug}`}
+      className="group flex flex-col bg-white border border-neutral-200 rounded-lg overflow-hidden shadow-xs cursor-pointer hover:shadow-md transition-all duration-300"
+    >
       <div className="relative overflow-hidden aspect-[16/10] bg-neutral-100">
         <img
           src={post.featuredImage}
@@ -27,7 +31,7 @@ const SubHeroCard = ({ post }: SubHeroCardProps) => {
           {post.publishedAt}
         </span>
       </div>
-    </div>
+    </Link>
   );
 };
 

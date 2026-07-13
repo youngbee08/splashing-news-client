@@ -1,12 +1,16 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/navs/web/Header";
 import Footer from "../components/navs/web/Footer";
+import { useEffect } from "react";
 
 const WebLayout = () => {
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location]);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#fcfcfd]">
-     
-
       {/* Main Header */}
       <Header />
 

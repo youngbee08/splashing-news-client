@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { Post } from "../../types/generalTypes";
 
 interface PoliticsCardProps {
@@ -6,7 +7,10 @@ interface PoliticsCardProps {
 
 const PoliticsCard = ({ post }: PoliticsCardProps) => {
   return (
-    <div className="group flex flex-col bg-white border border-neutral-200 rounded-lg overflow-hidden shadow-xs cursor-pointer hover:shadow-md transition-shadow duration-300">
+    <Link
+      to={`/post/${post.slug}`}
+      className="group flex flex-col bg-white border border-neutral-200 rounded-lg overflow-hidden shadow-xs cursor-pointer hover:shadow-md transition-shadow duration-300"
+    >
       <div className="relative overflow-hidden aspect-[16/10] bg-neutral-100">
         <img
           src={post.featuredImage}
@@ -21,7 +25,7 @@ const PoliticsCard = ({ post }: PoliticsCardProps) => {
           {post.title}
         </h3>
       </div>
-    </div>
+    </Link>
   );
 };
 
