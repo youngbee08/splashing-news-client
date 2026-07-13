@@ -1,9 +1,24 @@
-import React from 'react'
+import { Outlet } from "react-router-dom";
+import Header from "../components/navs/web/Header";
+import Footer from "../components/navs/web/Footer";
 
-const webLayout = () => {
+const WebLayout = () => {
   return (
-    <div>webLayout</div>
-  )
-}
+    <div className="min-h-screen flex flex-col bg-[#fcfcfd]">
+     
 
-export default webLayout
+      {/* Main Header */}
+      <Header />
+
+      {/* Main Content Area */}
+      <main className="grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Outlet />
+      </main>
+
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+};
+
+export default WebLayout;
