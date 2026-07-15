@@ -16,9 +16,17 @@ const PostDetail = () => {
   if (!post) {
     return (
       <div className="text-center py-20 space-y-4">
-        <h2 className="text-2xl font-heading font-bold text-neutral-800">Article Not Found</h2>
-        <p className="text-neutral-500">The news story you are looking for does not exist or has been archived.</p>
-        <Link to="/" className="inline-block bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-semibold px-6 py-2 rounded-md transition-colors shadow-sm">
+        <h2 className="text-2xl font-heading font-bold text-neutral-800">
+          Article Not Found
+        </h2>
+        <p className="text-neutral-500">
+          The news story you are looking for does not exist or has been
+          archived.
+        </p>
+        <Link
+          to="/"
+          className="inline-block bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-semibold px-6 py-2 rounded-md transition-colors shadow-sm"
+        >
           Return Home
         </Link>
       </div>
@@ -78,12 +86,13 @@ const PostDetail = () => {
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({
-        title: post.title,
-        text: post.excerpt,
-        url: window.location.href,
-      })
-      .catch((err) => console.log("Error sharing:", err));
+      navigator
+        .share({
+          title: post.title,
+          text: post.excerpt,
+          url: window.location.href,
+        })
+        .catch((err) => console.log("Error sharing:", err));
     } else {
       navigator.clipboard.writeText(window.location.href);
       setShowToast(true);
@@ -96,12 +105,21 @@ const PostDetail = () => {
 
   return (
     <article className="max-w-3xl mx-auto space-y-8 relative">
-      
       {/* Toast Alert for Clipboard Share Link */}
       {showToast && (
         <div className="fixed bottom-5 right-5 bg-neutral-900 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-lg border border-neutral-800 z-50 animate-bounce flex items-center gap-2">
-          <svg className="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          <svg
+            className="h-4 w-4 text-emerald-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={3}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 13l4 4L19 7"
+            />
           </svg>
           Link copied to clipboard!
         </div>
@@ -121,23 +139,6 @@ const PostDetail = () => {
         <p className="text-neutral-500 text-base leading-relaxed font-medium">
           {post.excerpt}
         </p>
-
-        {/* Metadata Details */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-y border-neutral-150 py-3 mt-6 text-xs text-neutral-450 font-semibold">
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-600 font-bold text-xs uppercase">
-              {post.author.charAt(0)}
-            </div>
-            <div>
-              <span className="text-neutral-800 block">{post.author}</span>
-              <span className="font-medium text-[10px]">{post.readingTime}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <span>Views: {post.views}</span>
-            <span>Published: {new Date(post.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
-          </div>
-        </div>
       </div>
 
       {/* Featured Image */}
@@ -160,7 +161,6 @@ const PostDetail = () => {
 
       {/* Action Row: Like and Share */}
       <div className="flex items-center justify-between border-y border-neutral-150 py-4 my-8">
-        
         {/* Like Button */}
         <button
           onClick={handleLike}
@@ -172,12 +172,25 @@ const PostDetail = () => {
           }`}
         >
           {hasLiked ? (
-            <svg className="h-5 w-5 fill-current text-[#dc2626]" viewBox="0 0 24 24">
+            <svg
+              className="h-5 w-5 fill-current text-[#dc2626]"
+              viewBox="0 0 24 24"
+            >
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
           ) : (
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
             </svg>
           )}
           <span>{likes} Likes</span>
@@ -189,12 +202,21 @@ const PostDetail = () => {
           type="button"
           className="flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-650 hover:bg-neutral-50 rounded-full text-sm font-semibold transition-all"
         >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742l4.622-2.311m0 0a3 3 0 10-2.671-1.857L6 8.89m6.914.01l-4.622 2.311m0 0a3 3 0 102.67 1.858L18 12.89" />
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8.684 10.742l4.622-2.311m0 0a3 3 0 10-2.671-1.857L6 8.89m6.914.01l-4.622 2.311m0 0a3 3 0 102.67 1.858L18 12.89"
+            />
           </svg>
           Share Article
         </button>
-
       </div>
 
       {/* 5. Comments Section */}
@@ -204,7 +226,10 @@ const PostDetail = () => {
         </h3>
 
         {/* Submit Comment Form */}
-        <form onSubmit={handleCommentSubmit} className="bg-neutral-50 border border-neutral-200 rounded-lg p-5 space-y-4">
+        <form
+          onSubmit={handleCommentSubmit}
+          className="bg-neutral-50 border border-neutral-200 rounded-lg p-5 space-y-4"
+        >
           <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-widest">
             Join the conversation
           </h4>
@@ -237,14 +262,21 @@ const PostDetail = () => {
         {/* Comments Feed */}
         <div className="space-y-4 pt-2">
           {comments.map((comment) => (
-            <div key={comment.id} className="flex gap-4 p-4 border border-neutral-200 rounded-lg bg-white shadow-2xs">
+            <div
+              key={comment.id}
+              className="flex gap-4 p-4 border border-neutral-200 rounded-lg bg-white shadow-2xs"
+            >
               <div className="h-8 w-8 rounded-full bg-red-50 flex items-center justify-center text-[#dc2626] font-bold text-xs uppercase shrink-0">
                 {comment.author.charAt(0)}
               </div>
               <div className="space-y-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-sm font-bold text-neutral-850">{comment.author}</span>
-                  <span className="text-[10px] text-neutral-400 font-medium">{comment.date}</span>
+                  <span className="text-sm font-bold text-neutral-850">
+                    {comment.author}
+                  </span>
+                  <span className="text-[10px] text-neutral-400 font-medium">
+                    {comment.date}
+                  </span>
                 </div>
                 <p className="text-xs sm:text-sm text-neutral-600 leading-normal">
                   {comment.text}
@@ -253,9 +285,7 @@ const PostDetail = () => {
             </div>
           ))}
         </div>
-
       </div>
-
     </article>
   );
 };

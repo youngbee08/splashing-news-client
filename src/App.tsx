@@ -7,30 +7,44 @@ import Health from "./pages/web/Health";
 import Sports from "./pages/web/Sports";
 import PostDetail from "./pages/web/PostDetail";
 import WebLayout from "./layouts/WebLayout";
+import Login from "./pages/cms/auth/Login";
+import { Toaster } from "sonner";
+import Overview from "./pages/cms/dashboard/Overview";
 
 const App = () => {
   return (
-    <Routes>
-      <Route element={<WebLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/politics" element={<Politics />} />
-        <Route path="/business" element={<Business />} />
-        <Route path="/health" element={<Health />} />
-        <Route path="/sports" element={<Sports />} />
-        <Route path="/post/:slug" element={<PostDetail />} />
-      </Route>
-      <Route
-        path="*"
-        element={
-          <>
-            <div className="h-screen flex flex-col items-center justify-center font-mono! font-light text-neutral-500">
-              <p>404 | Page not found</p>
-            </div>
-          </>
-        }
-      />
-    </Routes>
+    <>
+      <Toaster richColors closeButton />
+
+      <Routes>
+        <Route path="/auth/admin-login" element={<Login />} />
+
+        <Route element={<WebLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/politics" element={<Politics />} />
+          <Route path="/business" element={<Business />} />
+          <Route path="/health" element={<Health />} />
+          <Route path="/sports" element={<Sports />} />
+          <Route path="/post/:slug" element={<PostDetail />} />
+        </Route>
+
+        <Route>
+          <Route path="/admin/overview" element={<Overview />} />
+        </Route>
+
+        <Route
+          path="*"
+          element={
+            <>
+              <div className="h-screen flex flex-col items-center justify-center font-mono! font-light text-neutral-500">
+                <p>404 | Page not found</p>
+              </div>
+            </>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 
