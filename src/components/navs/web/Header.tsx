@@ -4,6 +4,7 @@ import navItems from "../../../utils/navItems";
 import { IoIosSearch } from "react-icons/io";
 
 const Header = () => {
+  const webNavItems = navItems.filter((item) => item.type === "web");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -29,7 +30,7 @@ const Header = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6">
-              {navItems.map((link) => (
+              {webNavItems.map((link) => (
                 <NavLink key={link.name} to={link.path} className={linkClass}>
                   {link.name}
                 </NavLink>
@@ -58,7 +59,7 @@ const Header = () => {
               </span>
               <input
                 type="search"
-                placeholder="Search government news..."
+                placeholder="Search splashing news..."
                 className="pl-10 pr-4 py-1.5 w-56 sm:w-64 bg-neutral-50 border border-neutral-250 rounded-full text-xs font-medium text-neutral-800 placeholder-neutral-450 focus:outline-none focus:border-neutral-400 focus:bg-white focus:ring-1 focus:ring-neutral-400/20 transition-all"
               />
             </div>
@@ -124,7 +125,7 @@ const Header = () => {
               />
             </div>
 
-            {navItems.map((link) => (
+            {webNavItems.map((link) => (
               <NavLink
                 key={link.name}
                 to={link.path}

@@ -7,9 +7,11 @@ import Health from "./pages/web/Health";
 import Sports from "./pages/web/Sports";
 import PostDetail from "./pages/web/PostDetail";
 import WebLayout from "./layouts/WebLayout";
+import CMSLayout from "./layouts/CMSLayout";
 import Login from "./pages/cms/auth/Login";
 import { Toaster } from "sonner";
 import Overview from "./pages/cms/dashboard/Overview";
+import Posts from "./pages/cms/dashboard/Posts";
 
 const App = () => {
   return (
@@ -29,8 +31,9 @@ const App = () => {
           <Route path="/post/:slug" element={<PostDetail />} />
         </Route>
 
-        <Route>
+        <Route element={<CMSLayout />}>
           <Route path="/admin/overview" element={<Overview />} />
+          <Route path="/admin/posts" element={<Posts />} />
         </Route>
 
         <Route

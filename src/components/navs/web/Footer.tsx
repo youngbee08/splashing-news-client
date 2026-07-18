@@ -121,7 +121,7 @@ const Footer = () => {
 
         {/* Bottom Section: Divider + Copyright + Status */}
         <div className="border-t border-neutral-900 pt-8 mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-neutral-500">
-          <p>© 2024 Government News Network. All rights reserved.</p>
+          <p>© 2024 Splashing News. All rights reserved.</p>
 
           <div className="flex items-center gap-2 text-neutral-450">
             <span className="flex h-2 w-2 relative">

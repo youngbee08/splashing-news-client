@@ -114,7 +114,7 @@ const Home = () => {
               Splashingnews Morning Brief
             </h3>
             <p className="text-neutral-600 text-xs leading-relaxed mb-4">
-              The essential government news delivered to your inbox every
+              The essential splashing news delivered to your inbox every
               morning at 7:00 AM.
             </p>
             <form onSubmit={(e) => e.preventDefault()} className="space-y-3">

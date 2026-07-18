@@ -31,3 +31,12 @@ export interface TrendingArticle {
   category: string;
   title: string;
 }
+
+export interface NavItem {
+  name: string;
+  path: string;
+  type: "web" | "cms";
+  icon?: string;
+  isBottom?: boolean;
+}
+

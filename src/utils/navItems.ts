@@ -1,10 +1,20 @@
-const navItems = [
-  { name: "Home", path: "/" },
-  { name: "News", path: "/news" },
-  { name: "Politics", path: "/politics" },
-  { name: "Business", path: "/business" },
-  { name: "Health", path: "/health" },
-  { name: "Sports", path: "/sports" },
+import type { NavItem } from "../types/generalTypes";
+
+const navItems: NavItem[] = [
+  // Web Nav Items
+  { name: "Home", path: "/", type: "web" },
+  { name: "News", path: "/news", type: "web" },
+  { name: "Politics", path: "/politics", type: "web" },
+  { name: "Business", path: "/business", type: "web" },
+  { name: "Health", path: "/health", type: "web" },
+  { name: "Sports", path: "/sports", type: "web" },
+
+  // CMS Nav Items
+  { name: "Dashboard", path: "/admin/overview", type: "cms", icon: "Dashboard" },
+  { name: "Posts", path: "/admin/posts", type: "cms", icon: "Posts" },
+
+  // CMS Bottom Nav Items
+  { name: "Sign Out", path: "/auth/admin-login", type: "cms", icon: "SignOut", isBottom: true },
 ];
 
-export default navItems
+export default navItems;
