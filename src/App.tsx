@@ -12,6 +12,7 @@ import Login from "./pages/cms/auth/Login";
 import { Toaster } from "sonner";
 import Overview from "./pages/cms/dashboard/Overview";
 import Posts from "./pages/cms/dashboard/Posts";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 const App = () => {
   return (
@@ -31,9 +32,11 @@ const App = () => {
           <Route path="/post/:slug" element={<PostDetail />} />
         </Route>
 
-        <Route element={<CMSLayout />}>
-          <Route path="/admin/overview" element={<Overview />} />
-          <Route path="/admin/posts" element={<Posts />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<CMSLayout />}>
+            <Route path="/admin/overview" element={<Overview />} />
+            <Route path="/admin/posts" element={<Posts />} />
+          </Route>
         </Route>
 
         <Route

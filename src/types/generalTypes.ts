@@ -40,3 +40,31 @@ export interface NavItem {
   isBottom?: boolean;
 }
 
+export interface UserProviderProps {
+  children: React.ReactNode;
+}
+
+export interface User {
+  id: string;
+  fullname: string;
+  email: string;
+  role: string;
+}
+
+export interface DashboardMetrics {
+  total_posts: number;
+  page_views: number;
+  activity_level: string;
+}
+
+export interface UserContextType {
+  logout: () => void;
+  user: User | null;
+  token: string;
+  login: (token: string, user: User) => void;
+  isLoggedIn: boolean;
+  refreshUser: (token: string) => void;
+  // refreshUser: (token: string) => Promise<void>;
+  loading: boolean;
+  dashboardMetrics: DashboardMetrics;
+}
