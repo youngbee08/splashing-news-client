@@ -16,7 +16,7 @@ const HeroCard = ({ post }: HeroCardProps) => {
   return (
     <Link
       to={`/post/${post.slug}`}
-      className="block group relative overflow-hidden rounded-lg shadow-xs border border-neutral-100 bg-neutral-900 aspect-[16/11] md:aspect-[16/10] lg:aspect-auto lg:h-[480px] cursor-pointer"
+      className="block group relative overflow-hidden rounded-lg shadow-xs border border-neutral-100 bg-neutral-900 h-[65vh] lg:h-[480px] cursor-pointer"
     >
       <img
         src={post.featuredImage}

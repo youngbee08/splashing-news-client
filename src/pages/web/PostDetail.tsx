@@ -1,11 +1,13 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { usePostContext } from "../../hooks/UsePostContext";
 import type { Post } from "../../types/generalTypes";
 import { toast } from "sonner";
 import { FaHeart, FaRegHeart, FaShareAlt } from "react-icons/fa";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 const PostDetail = () => {
+  const navigate = useNavigate();
   const [postLiked, setPostLiked] = useState(false);
   const { slug } = useParams<{ slug: string }>();
   const { postsData, likePost } = usePostContext();
@@ -25,12 +27,22 @@ const PostDetail = () => {
           The news story you are looking for does not exist or has been
           archived.
         </p>
-        <Link
-          to="/"
-          className="inline-block bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-semibold px-6 py-2 rounded-md transition-colors shadow-sm"
-        >
-          Return Home
-        </Link>
+        <div className="flex items-center justify-center gap-3 pt-2">
+          <button
+            onClick={() => navigate(-1)}
+            type="button"
+            className="inline-flex items-center gap-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-sm font-semibold px-5 py-2 rounded-md transition-colors shadow-2xs cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Go Back</span>
+          </button>
+          <Link
+            to="/"
+            className="inline-block bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-semibold px-6 py-2 rounded-md transition-colors shadow-2xs"
+          >
+            Return Home
+          </Link>
+        </div>
       </div>
     );
   }
@@ -50,23 +62,34 @@ const PostDetail = () => {
     }
   };
 
-  const handleLikePost = ()=>{
-    setPostLiked(true)
+  const handleLikePost = () => {
+    setPostLiked(true);
     likePost({ id: post._id, action: "like" });
-  }
+  };
 
   const paragraphs = post.content.split("\n\n");
 
   return (
     <article className="max-w-3xl mx-auto space-y-8 relative">
       <div className="space-y-4">
-        <Link
-          to={`/${post.category?.slug || "news"}`}
-          className="inline-block bg-[#dc2626]/10 text-[#dc2626] text-[10px] font-bold tracking-widest uppercase px-2.5 py-0.75 rounded-sm hover:bg-[#dc2626]/20 transition-colors"
-        >
-          {post.category?.name ||
-            (typeof post.category === "string" ? post.category : "General")}
-        </Link>
+        <div className="flex items-center justify-between gap-4">
+          <button
+            onClick={() => navigate(-1)}
+            type="button"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-600 hover:text-neutral-900 transition-all cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-neutral-500" />
+            <span>Back</span>
+          </button>
+
+          <Link
+            to={`/${post.category?.slug || "news"}`}
+            className="inline-block bg-[#dc2626]/10 text-[#dc2626] text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-sm hover:bg-[#dc2626]/20 transition-colors"
+          >
+            {post.category?.name ||
+              (typeof post.category === "string" ? post.category : "General")}
+          </Link>
+        </div>
         <h1 className="text-3xl sm:text-4.5xl font-heading font-black text-neutral-900 leading-tight">
           {post.title}
         </h1>

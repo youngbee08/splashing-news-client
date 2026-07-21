@@ -90,7 +90,7 @@ const Home = () => {
 
   return (
     <div className="space-y-16">
-      <section className="grid grid-cols-1 lg:grid-cols-12 items-center gap-6">
+      <section className="grid grid-cols-1 lg:grid-cols-12 items-center gap-0">
         <div className="lg:col-span-7 xl:col-span-8">
           <HeroCard post={hero} />
         </div>
@@ -214,7 +214,7 @@ const Home = () => {
             Politics
           </h2>
           <Link
-            to="/politics"
+            to="/articles/politics"
             className="border border-neutral-250 hover:bg-neutral-50 text-neutral-700 text-xs font-bold tracking-wider uppercase px-4 py-1.5 rounded-md transition-colors"
           >
             View All

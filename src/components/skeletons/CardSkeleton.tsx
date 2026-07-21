@@ -5,7 +5,7 @@ interface CardSkeletonProps {
 export const CardSkeleton = ({ variant = "latest" }: CardSkeletonProps) => {
   if (variant === "hero") {
     return (
-      <div className="relative overflow-hidden rounded-lg shadow-xs border border-neutral-100 bg-neutral-200 aspect-[16/11] md:aspect-[16/10] lg:aspect-auto lg:h-[480px] w-full animate-pulse">
+      <div className="relative overflow-hidden rounded-lg shadow-xs border border-neutral-100 bg-neutral-200 h-[65vh] lg:h-[480px] w-full animate-pulse">
         <div className="absolute inset-0 bg-neutral-300"></div>
         <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 flex flex-col justify-end space-y-4">
           <div className="h-4 bg-neutral-400 rounded-sm w-20"></div>

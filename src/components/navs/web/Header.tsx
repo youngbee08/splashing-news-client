@@ -21,12 +21,7 @@ const Header = () => {
             name: cat.name,
             path: `/articles/${cat.slug || cat.name.toLowerCase()}`,
           }))
-      : [
-          { name: "Politics", path: "/politics" },
-          { name: "Business", path: "/business" },
-          { name: "Health", path: "/health" },
-          { name: "Sports", path: "/sports" },
-        ];
+      : [];
 
   const webNavItems = [...baseNavItems, ...categoryItems];
 
