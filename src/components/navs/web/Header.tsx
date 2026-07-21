@@ -1,11 +1,34 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import navItems from "../../../utils/navItems";
 import { IoIosSearch } from "react-icons/io";
+import { usePostContext } from "../../../hooks/UsePostContext";
 
 const Header = () => {
-  const webNavItems = navItems.filter((item) => item.type === "web");
+  const { categories } = usePostContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const baseNavItems = [
+    { name: "Home", path: "/" },
+    { name: "News", path: "/news" },
+  ];
+
+  const categoryItems =
+    Array.isArray(categories) && categories.length > 0
+      ? categories
+          .slice(0, 2)
+          .filter((cat) => cat.isActive !== false)
+          .map((cat) => ({
+            name: cat.name,
+            path: `/articles/${cat.slug || cat.name.toLowerCase()}`,
+          }))
+      : [
+          { name: "Politics", path: "/politics" },
+          { name: "Business", path: "/business" },
+          { name: "Health", path: "/health" },
+          { name: "Sports", path: "/sports" },
+        ];
+
+  const webNavItems = [...baseNavItems, ...categoryItems];
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `text-sm font-medium tracking-wide transition-all duration-200 py-1.5 px-0.5 border-b-2 ${

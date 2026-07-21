@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import UserProvider from "./contexts/UserContext.tsx";
+import PostProvider from "./contexts/PostContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -13,11 +14,14 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Router>
       <QueryClientProvider client={queryClient}>
-        <UserProvider >
-          <App />
-          <ReactQueryDevtools initialIsOpen={false} />
+        <UserProvider>
+          <PostProvider>
+            <App />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </PostProvider>
         </UserProvider>
       </QueryClientProvider>
     </Router>
   </StrictMode>,
 );
+

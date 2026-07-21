@@ -6,6 +6,13 @@ interface HeroCardProps {
 }
 
 const HeroCard = ({ post }: HeroCardProps) => {
+  const categoryName =
+    typeof post.category === "object" && post.category !== null
+      ? post.category.name
+      : typeof post.category === "string"
+      ? post.category
+      : "General";
+
   return (
     <Link
       to={`/post/${post.slug}`}
@@ -21,7 +28,7 @@ const HeroCard = ({ post }: HeroCardProps) => {
 
       <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 flex flex-col justify-end">
         <span className="inline-block bg-[#dc2626] text-white text-[10px] font-bold tracking-widest uppercase px-2.5 py-0.75 rounded-sm mb-3.5 w-max">
-          {post.category.name}
+          {categoryName}
         </span>
         <h2 className="text-2xl sm:text-3.5xl font-bold font-heading text-white! leading-tight mb-3 group-hover:text-neutral-200 transition-colors">
           {post.title}

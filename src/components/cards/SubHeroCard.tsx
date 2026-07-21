@@ -6,6 +6,13 @@ interface SubHeroCardProps {
 }
 
 const SubHeroCard = ({ post }: SubHeroCardProps) => {
+  const categoryName =
+    typeof post.category === "object" && post.category !== null
+      ? post.category.name
+      : typeof post.category === "string"
+      ? post.category
+      : "General";
+
   return (
     <Link
       to={`/post/${post.slug}`}
@@ -19,7 +26,7 @@ const SubHeroCard = ({ post }: SubHeroCardProps) => {
           loading="lazy"
         />
         <span className="absolute top-3 left-3 bg-[#dc2626] text-white text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-sm shadow-xs">
-          {post.category.name}
+          {categoryName}
         </span>
       </div>
       

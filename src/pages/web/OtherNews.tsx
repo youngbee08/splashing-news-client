@@ -1,15 +1,18 @@
-import LatestNewsCard from "../../components/cards/LatestNewsCard";
 import { usePostContext } from "../../hooks/UsePostContext";
 import type { Post } from "../../types/generalTypes";
+import LatestNewsCard from "../../components/cards/LatestNewsCard";
+import { useParams } from "react-router-dom";
 
-const Business = () => {
+const OtherNews = () => {
   const { postsData } = usePostContext();
-  const rawPosts: Post[] = Array.isArray(postsData?.posts) ? postsData.posts : [];
+  const rawPosts: Post[] = Array.isArray(postsData?.data) ? postsData.data : [];
+
+  const { cat } = useParams();
 
   const posts = rawPosts.filter((post) => {
-    const catSlug = typeof post.category === "object" ? post.category?.slug : post.category;
-    const catName = typeof post.category === "object" ? post.category?.name?.toLowerCase() : String(post.category || "").toLowerCase();
-    return catSlug === "business" || catName === "business";
+    const catSlug =
+      typeof post.category === "object" ? post.category?.slug : post.category;
+    return catSlug === cat;
   });
 
   return (
@@ -17,10 +20,11 @@ const Business = () => {
       <div className="border-b border-neutral-200 pb-4">
         <h1 className="text-3xl font-heading font-black text-neutral-900 tracking-tight flex items-center gap-3">
           <span className="block h-8 w-1 bg-[#dc2626]"></span>
-          Business & Markets
+          {cat && cat[0]?.toUpperCase() + cat.slice(1)}{" "}
         </h1>
         <p className="text-neutral-500 text-sm mt-1.5 font-medium">
-          Insights on economic updates, financial market movements, tariffs, and corporate trade policies.
+          Explore the latest news and updates in {cat}. Stay informed with the
+          most recent articles.{" "}
         </p>
       </div>
 
@@ -33,4 +37,4 @@ const Business = () => {
   );
 };
 
-export default Business;
+export default OtherNews;

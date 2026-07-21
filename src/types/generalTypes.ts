@@ -16,10 +16,12 @@ export interface Post {
   content: string;
   featuredImage: string;
   category: Category;
-  author: string;
+  author: { _id: string; fullname?: string; name?: string; email?: string };
   status: "draft" | "published";
   views: number;
   readingTime: string;
+  likes: number;
+  comments?: Comment[];
   isFeatured: boolean;
   publishedAt: string;
   createdAt?: string;
@@ -68,3 +70,105 @@ export interface UserContextType {
   loading: boolean;
   dashboardMetrics: DashboardMetrics;
 }
+
+export interface CreateCategoryInput {
+  name: string;
+  description?: string;
+}
+
+export interface CreatePostInput {
+  title: string;
+  content: string;
+  category: string; // CATEGORY_ID
+  status: "draft" | "published";
+  featuredImage?: string;
+  excerpt?: string;
+}
+
+export interface CommentInput {
+  name: string;
+  message: string;
+  postId: string;
+}
+
+export interface Comment {
+  _id: string;
+  name: string;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SiteSettings {
+  siteName: string;
+  socialLinks?: {
+    twitter?: string;
+    facebook?: string;
+    instagram?: string;
+    [key: string]: string | undefined;
+  };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface PostQueryOptions {
+  page?: number;
+  limit?: number;
+  search?: string;
+  sort?: string;
+  category?: string;
+}
+
+export interface PaginatedPostsResponse {
+  data: Post[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
+export interface PostContextType {
+  categories: Category[] | undefined;
+  isCategoriesLoading: boolean;
+  categoriesError: unknown;
+
+  postsData: PaginatedPostsResponse | undefined;
+  isPostsLoading: boolean;
+  postsError: unknown;
+  postsParams: PostQueryOptions;
+  setPostsParams: React.Dispatch<React.SetStateAction<PostQueryOptions>>;
+
+  settings: SiteSettings | undefined;
+  isSettingsLoading: boolean;
+  settingsError: unknown;
+
+  createCategory: (data: CreateCategoryInput) => Promise<Category>;
+  isCreatingCategory: boolean;
+
+  createPost: (data: CreatePostInput) => Promise<Post>;
+  isCreatingPost: boolean;
+
+  likePost: (params: { id: string; action: "like" | "unlike" }) => void;
+  isLikingPost: boolean;
+
+  addComment: (data: CommentInput) => void;
+  isAddingComment: boolean;
+
+  uploadMedia: (file: File) => Promise<{ url: string }>;
+  isUploadingMedia: boolean;
+
+  updateSettings: (data: Partial<SiteSettings>) => Promise<SiteSettings>;
+  isUpdatingSettings: boolean;
+}
+
+export interface PostProviderProps {
+  children: React.ReactNode;
+}
+
+// export interface OtherNewsProps {
+//   news_name: string;
+//   news_desc: string;
+//   news_slug: string;
+// }

@@ -13,6 +13,7 @@ import { Toaster } from "sonner";
 import Overview from "./pages/cms/dashboard/Overview";
 import Posts from "./pages/cms/dashboard/Posts";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import OtherNews from "./pages/web/OtherNews";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/business" element={<Business />} />
           <Route path="/health" element={<Health />} />
           <Route path="/sports" element={<Sports />} />
+          <Route path="/articles/:cat" element={<OtherNews />} />
           <Route path="/post/:slug" element={<PostDetail />} />
         </Route>
 

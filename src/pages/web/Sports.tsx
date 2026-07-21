@@ -1,8 +1,16 @@
-import { allPosts } from "../../data";
 import LatestNewsCard from "../../components/cards/LatestNewsCard";
+import { usePostContext } from "../../hooks/UsePostContext";
+import type { Post } from "../../types/generalTypes";
 
 const Sports = () => {
-  const posts = allPosts.filter((post) => post.category.slug === "sports");
+  const { postsData } = usePostContext();
+  const rawPosts: Post[] = Array.isArray(postsData?.posts) ? postsData.posts : [];
+
+  const posts = rawPosts.filter((post) => {
+    const catSlug = typeof post.category === "object" ? post.category?.slug : post.category;
+    const catName = typeof post.category === "object" ? post.category?.name?.toLowerCase() : String(post.category || "").toLowerCase();
+    return catSlug === "sports" || catName === "sports";
+  });
 
   return (
     <div className="space-y-10">
