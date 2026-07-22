@@ -37,9 +37,51 @@ export const getPosts = async (
   return res.data;
 };
 
+export const getPostBySlug = async (slug: string): Promise<Post> => {
+  const res = await api.get(`/posts/${slug}`);
+  return res.data.data || res.data;
+};
+
 export const createPost = async (data: CreatePostInput): Promise<Post> => {
+  if (data.featuredImage instanceof File) {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("category", data.category);
+    if (data.status) formData.append("status", data.status);
+    formData.append("featuredImage", data.featuredImage);
+    const res = await api.post("/posts", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data.data || res.data;
+  }
   const res = await api.post("/posts", data);
   return res.data.data || res.data;
+};
+
+export const updatePost = async (
+  id: string,
+  data: Partial<CreatePostInput>
+): Promise<Post> => {
+  if (data.featuredImage instanceof File) {
+    const formData = new FormData();
+    if (data.title !== undefined) formData.append("title", data.title);
+    if (data.content !== undefined) formData.append("content", data.content);
+    if (data.category !== undefined) formData.append("category", data.category);
+    if (data.status !== undefined) formData.append("status", data.status);
+    formData.append("featuredImage", data.featuredImage);
+    const res = await api.patch(`/posts/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data.data || res.data;
+  }
+  const res = await api.patch(`/posts/${id}`, data);
+  return res.data.data || res.data;
+};
+
+export const deletePost = async (id: string): Promise<void> => {
+  const res = await api.delete(`/posts/${id}`);
+  return res.data;
 };
 
 export const likePost = async (

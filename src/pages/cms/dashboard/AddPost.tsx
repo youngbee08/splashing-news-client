@@ -6,42 +6,29 @@ import { toast } from "sonner";
 
 const AddPost = () => {
   const navigate = useNavigate();
-  const { categories, createPost, isCreatingPost, uploadMedia } =
-    usePostContext();
+  const { categories, createPost, isCreatingPost } = usePostContext();
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState<"draft" | "published">("published");
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [imageUploading, setImageUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleFileSelected = async (file: File) => {
+  const handleFileSelected = (file: File) => {
     if (!file.type.startsWith("image/")) {
       toast.error("Please upload a valid image file");
       return;
     }
-
-    try {
-      setImageUploading(true);
-      const res = await uploadMedia(file);
-      setImageUrl(res.url);
-      toast.success("Featured image uploaded successfully");
-    } catch (err) {
-      toast.error("Failed to upload image");
-      console.error(err);
-    } finally {
-      setImageUploading(false);
-    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !content.trim() || !category) {
-      toast.error(
-        "Please fill in all required fields (Title, Category, and Content)",
-      );
+      toast.error("Please fill in all required fields (Title, Category, and Content)");
       return;
     }
 
@@ -51,9 +38,7 @@ const AddPost = () => {
         content: content.trim(),
         category,
         status,
-        featuredImage:
-          imageUrl ||
-          "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&fit=crop&q=80",
+        featuredImage: imageFile || imagePreview,
       });
 
       toast.success("Post created successfully!");
@@ -72,8 +57,7 @@ const AddPost = () => {
             Create New Post
           </h1>
           <p className="text-xs text-neutral-500 font-medium mt-1">
-            Fill in the details below to publish a new news post to Splashing
-            News.
+            Fill in the details below to publish a new news post to Splashing News.
           </p>
         </div>
       </div>
@@ -82,14 +66,14 @@ const AddPost = () => {
         <div className="flex flex-col gap-6">
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-neutral-600 font-body block mb-2">
-              post Title <span className="text-red-700">*</span>
+              Post Title <span className="text-red-700">*</span>
             </label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Breakththrough Innovations Announced in Green Energy Tech"
+              placeholder="e.g. Breakthrough Innovations Announced in Green Energy Tech"
               className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:bg-white focus:border-neutral-400 focus:ring-2 focus:ring-blue-500/10 transition-all font-medium"
             />
           </div>
@@ -151,9 +135,9 @@ const AddPost = () => {
               className={`relative border-2 border-dashed rounded-xl p-8 sm:p-10 transition-all duration-200 text-center flex flex-col items-center justify-center cursor-pointer group ${
                 isDragging
                   ? "border-[#b91c1c] bg-red-50/50 scale-[0.99]"
-                  : imageUrl
-                    ? "border-neutral-300 bg-neutral-50/30"
-                    : "border-neutral-300 hover:border-[#b91c1c] bg-neutral-50/50 hover:bg-neutral-100/50"
+                  : imagePreview
+                  ? "border-neutral-300 bg-neutral-50/30"
+                  : "border-neutral-300 hover:border-[#b91c1c] bg-neutral-50/50 hover:bg-neutral-100/50"
               }`}
             >
               <input
@@ -166,11 +150,11 @@ const AddPost = () => {
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               />
 
-              {imageUrl ? (
+              {imagePreview ? (
                 <div className="relative w-full flex flex-col items-center">
                   <div className="relative group/img overflow-hidden rounded-xl border border-neutral-200 max-h-64 w-full flex items-center justify-center bg-black/5">
                     <img
-                      src={imageUrl}
+                      src={imagePreview}
                       alt="Featured post Preview"
                       className="max-h-60 w-full object-cover rounded-xl"
                     />
@@ -180,17 +164,12 @@ const AddPost = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-green-700 font-semibold mt-3">
-                    <FiCheck className="w-4 h-4" />
-                    <span>Image uploaded successfully</span>
-                  </div>
-                </div>
-              ) : imageUploading ? (
-                <div className="py-6 flex flex-col items-center">
-                  <div className="w-12 h-12 border-3 border-[#b91c1c] border-t-transparent rounded-full animate-spin mb-3" />
-                  <p className="text-xs font-semibold text-neutral-700 animate-pulse">
-                    Uploading image to Cloudinary...
-                  </p>
+                  {imageFile && (
+                    <div className="flex items-center gap-1.5 text-xs text-green-700 font-semibold mt-3">
+                      <FiCheck className="w-4 h-4" />
+                      <span>Image selected</span>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="py-4 flex flex-col items-center">
@@ -204,18 +183,17 @@ const AddPost = () => {
                     or drag and drop
                   </p>
                   <p className="text-xs text-neutral-400 max-w-xs">
-                    SVG, PNG, JPG, WEBP or GIF (Recommended resolution 1200 x
-                    630 px)
+                    SVG, PNG, JPG, WEBP or GIF (Recommended resolution 1200 x 630 px)
                   </p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* post Content */}
+          {/* Post Content */}
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-neutral-600 font-body block mb-2">
-              post Content <span className="text-red-700">*</span>
+              Post Content <span className="text-red-700">*</span>
             </label>
             <textarea
               required
@@ -239,7 +217,7 @@ const AddPost = () => {
           </button>
           <button
             type="submit"
-            disabled={isCreatingPost || imageUploading}
+            disabled={isCreatingPost}
             className="px-6 py-2.5 bg-[#b91c1c] hover:bg-[#991b1b] text-white rounded-lg font-semibold transition-all disabled:opacity-50 cursor-pointer shadow-xs text-xs"
           >
             {isCreatingPost ? "Creating post..." : "Create Post"}

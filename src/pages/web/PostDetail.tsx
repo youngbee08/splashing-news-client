@@ -1,29 +1,30 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { usePostContext } from "../../hooks/UsePostContext";
-import type { Post } from "../../types/generalTypes";
+import { usePostBySlugQuery } from "../../hooks/usePostQueries";
 import { toast } from "sonner";
 import { FaHeart, FaRegHeart, FaShareAlt } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { PostDetailSkeleton } from "../../components/skeletons/CardSkeleton";
 
 const PostDetail = () => {
   const navigate = useNavigate();
   const [postLiked, setPostLiked] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const { slug } = useParams<{ slug: string }>();
-  const { postsData, likePost } = usePostContext();
-  const postsList: Post[] = Array.isArray(postsData?.data)
-    ? postsData.data
-    : [];
+  const { likePost } = usePostContext();
+  const { data: post, isLoading: isPostLoading } = usePostBySlugQuery(slug);
 
-  const post = postsList.find((p) => p.slug === slug);
+  if (isPostLoading) {
+    return <PostDetailSkeleton />;
+  }
 
   if (!post) {
     return (
       <div className="text-center py-20 space-y-4">
         <h2 className="text-2xl font-heading font-bold text-neutral-800">
-          Article Not Found
+          Post Not Found
         </h2>
         <p className="text-neutral-500">
           The news story you are looking for does not exist or has been
@@ -147,7 +148,6 @@ const PostDetail = () => {
         />
       </div>
 
-      {/* Article Content Body */}
       <div className="relative">
         <div className="text-neutral-800 text-base sm:text-lg leading-relaxed font-body space-y-6">
           {(isExpanded ? paragraphs : paragraphs.slice(0, 2)).map(
@@ -159,13 +159,11 @@ const PostDetail = () => {
           )}
         </div>
 
-        {/* Subtle Gradient Fade Mask when truncated */}
         {!isExpanded && paragraphs.length > 2 && (
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
         )}
       </div>
 
-      {/* View More / Show Less Button */}
       {paragraphs.length > 2 && (
         <div className="flex justify-center pt-2">
           <button
@@ -184,7 +182,6 @@ const PostDetail = () => {
       )}
 
       <div className="flex items-center justify-between border-y border-neutral-150 py-4 my-8">
-        {/* Like Button */}
         <button
           onClick={handleLikePost}
           type="button"
@@ -204,7 +201,7 @@ const PostDetail = () => {
           className="flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-650 hover:bg-neutral-50 rounded-full text-sm font-semibold transition-all"
         >
           <FaShareAlt />
-          Share Article
+          Share Post
         </button>
       </div>
 

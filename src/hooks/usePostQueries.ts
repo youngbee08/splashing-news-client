@@ -3,7 +3,10 @@ import {
   getCategories,
   createCategory,
   getPosts,
+  getPostBySlug,
   createPost,
+  updatePost,
+  deletePost,
   likePost,
   addComment,
   uploadMedia,
@@ -42,10 +45,39 @@ export const usePostsQuery = (params?: PostQueryOptions) => {
   });
 };
 
+export const usePostBySlugQuery = (slug?: string) => {
+  return useQuery({
+    queryKey: ["post", slug],
+    queryFn: () => getPostBySlug(slug!),
+    enabled: !!slug,
+  });
+};
+
 export const useCreatePostMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: CreatePostInput) => createPost(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+};
+
+export const useUpdatePostMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<CreatePostInput> }) =>
+      updatePost(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+};
+
+export const useDeletePostMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deletePost(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },

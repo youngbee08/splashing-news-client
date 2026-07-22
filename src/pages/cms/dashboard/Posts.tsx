@@ -9,6 +9,8 @@ import {
 import { usePostContext } from "../../../hooks/UsePostContext";
 import type { Post } from "../../../types/generalTypes";
 import { PostsTableSkeleton } from "../../../components/skeletons/TableSkeeton";
+import EditPostModal from "../../../components/modals/EditPostModal";
+import DeletePostModal from "../../../components/modals/DeletePostModal";
 
 const Posts = () => {
   const navigate = useNavigate();
@@ -18,10 +20,13 @@ const Posts = () => {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState<
-    "all" | "published" | "draft"
+    "all" | "published" | "drafts"
   >("all");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+
+  const [selectedEditPost, setSelectedEditPost] = useState<Post | null>(null);
+  const [selectedDeletePost, setSelectedDeletePost] = useState<Post | null>(null);
 
   useEffect(() => {
     setPostsParams((prev) => ({
@@ -113,14 +118,14 @@ const Posts = () => {
           <select
             value={statusFilter}
             onChange={(e) => {
-              setStatusFilter(e.target.value as "all" | "published" | "draft");
+              setStatusFilter(e.target.value as "all" | "published" | "drafts");
               setCurrentPage(1);
             }}
             className="bg-white border border-neutral-200 rounded-lg text-xs font-medium px-3 py-2 text-neutral-700 focus:outline-none focus:border-neutral-400 cursor-pointer"
           >
             <option value="all">All Statuses</option>
             <option value="published">Published</option>
-            <option value="draft">Draft</option>
+            <option value="drafts">Drafts</option>
           </select>
         </div>
       </div>
@@ -132,7 +137,7 @@ const Posts = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-neutral-200/60 bg-neutral-50/50 text-xs! text-neutral-400 uppercase ">
+                <tr className="border-b border-neutral-200/60 bg-neutral-50/50 text-xs! text-neutral-400 uppercase">
                   <th className="px-6 py-4">Title</th>
                   <th className="px-6 py-4">Category</th>
                   <th className="px-6 py-4">Author</th>
@@ -200,13 +205,15 @@ const Posts = () => {
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button
-                            className="p-1.5 hover:bg-neutral-100 rounded-lg text-neutral-500 hover:text-[#b91c1c] transition-colors"
+                            onClick={() => setSelectedEditPost(post)}
+                            className="p-1.5 hover:bg-neutral-100 rounded-lg text-neutral-500 hover:text-[#b91c1c] transition-colors cursor-pointer"
                             title="Edit Post"
                           >
                             <FiEdit className="w-3.5 h-3.5" />
                           </button>
                           <button
-                            className="p-1.5 hover:bg-neutral-100 rounded-lg text-neutral-500 hover:text-red-700 transition-colors"
+                            onClick={() => setSelectedDeletePost(post)}
+                            className="p-1.5 hover:bg-neutral-100 rounded-lg text-neutral-500 hover:text-red-700 transition-colors cursor-pointer"
                             title="Delete Post"
                           >
                             <FiTrash2 className="w-3.5 h-3.5" />
@@ -257,6 +264,18 @@ const Posts = () => {
           </div>
         )}
       </div>
+
+      <EditPostModal
+        post={selectedEditPost}
+        isOpen={!!selectedEditPost}
+        onClose={() => setSelectedEditPost(null)}
+      />
+
+      <DeletePostModal
+        post={selectedDeletePost}
+        isOpen={!!selectedDeletePost}
+        onClose={() => setSelectedDeletePost(null)}
+      />
     </div>
   );
 };

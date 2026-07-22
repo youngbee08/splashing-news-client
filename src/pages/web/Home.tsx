@@ -53,10 +53,10 @@ const Home = () => {
     return (
       <div className="text-center py-20 bg-neutral-50 border border-neutral-200 rounded-xl">
         <h2 className="text-2xl font-heading font-bold text-neutral-800 mb-2">
-          No Articles Available
+          No Posts Available
         </h2>
         <p className="text-neutral-500 text-sm">
-          Check back later for news articles and updates.
+          Check back later for news posts and updates.
         </p>
       </div>
     );
@@ -64,7 +64,7 @@ const Home = () => {
 
   const hero = posts[0];
   const subHeroList = posts.length > 1 ? posts.slice(1, 5) : [];
-  const latestList = posts.length > 5 ? posts.slice(5, 11) : posts.slice(1);
+  const latestList = posts.length > 5 ? posts.slice(5, 11) : posts.slice(0);
 
   const politicsList = posts
     .filter((p) => {
@@ -90,7 +90,7 @@ const Home = () => {
 
   return (
     <div className="space-y-16">
-      <section className="grid grid-cols-1 lg:grid-cols-12 items-center gap-0">
+      <section className="grid grid-cols-1 lg:grid-cols-12 items-center gap-6">
         <div className="lg:col-span-7 xl:col-span-8">
           <HeroCard post={hero} />
         </div>

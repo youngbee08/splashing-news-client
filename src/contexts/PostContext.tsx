@@ -5,6 +5,8 @@ import {
   useCreateCategoryMutation,
   usePostsQuery,
   useCreatePostMutation,
+  useUpdatePostMutation,
+  useDeletePostMutation,
   useLikePostMutation,
   useAddCommentMutation,
   useUploadMediaMutation,
@@ -49,6 +51,8 @@ const PostProvider = ({ children }: PostProviderProps) => {
 
   const createCategoryMutation = useCreateCategoryMutation();
   const createPostMutation = useCreatePostMutation();
+  const updatePostMutation = useUpdatePostMutation();
+  const deletePostMutation = useDeletePostMutation();
   const likePostMutation = useLikePostMutation();
   const addCommentMutation = useAddCommentMutation();
   const uploadMediaMutation = useUploadMediaMutation();
@@ -75,6 +79,13 @@ const PostProvider = ({ children }: PostProviderProps) => {
 
     createPost: (data: CreatePostInput) => createPostMutation.mutateAsync(data),
     isCreatingPost: createPostMutation.isPending,
+
+    updatePost: (id: string, data: Partial<CreatePostInput>) =>
+      updatePostMutation.mutateAsync({ id, data }),
+    isUpdatingPost: updatePostMutation.isPending,
+
+    deletePost: (id: string) => deletePostMutation.mutateAsync(id),
+    isDeletingPost: deletePostMutation.isPending,
 
     likePost: (params: { id: string; action: "like" | "unlike" }) =>
       likePostMutation.mutateAsync(params),

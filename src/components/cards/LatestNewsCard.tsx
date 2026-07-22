@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FiEye, FiMessageCircle, FiHeart } from "react-icons/fi";
 import type { Post } from "../../types/generalTypes";
 
 interface LatestNewsCardProps {
@@ -12,6 +13,10 @@ const LatestNewsCard = ({ post }: LatestNewsCardProps) => {
       : typeof post.category === "string"
         ? post.category
         : "General";
+
+  const commentsCount = Array.isArray(post.comments)
+    ? post.comments.length
+    : 0;
 
   return (
     <Link
@@ -40,8 +45,22 @@ const LatestNewsCard = ({ post }: LatestNewsCardProps) => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-semibold text-neutral-450 border-t border-neutral-100 pt-4 mt-4">
-          <span>By Splashing news</span>
+        <div className="flex items-center justify-between gap-2 text-xs font-semibold text-neutral-450 border-t border-neutral-100 pt-4 mt-4">
+          <span className="truncate">By Splashing News</span>
+          <div className="flex items-center gap-3 shrink-0 text-neutral-500 font-medium">
+            <span className="flex items-center gap-1" title="Views">
+              <FiEye className="w-3.5 h-3.5" />
+              <span>{post.views || 0}</span>
+            </span>
+            <span className="flex items-center gap-1" title="Comments">
+              <FiMessageCircle className="w-3.5 h-3.5" />
+              <span>{commentsCount}</span>
+            </span>
+            <span className="flex items-center gap-1" title="Likes">
+              <FiHeart className="w-3.5 h-3.5 text-[#dc2626]" />
+              <span>{post.likes || 0}</span>
+            </span>
+          </div>
         </div>
       </div>
     </Link>

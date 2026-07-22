@@ -63,4 +63,40 @@ export const CardSkeleton = ({ variant = "latest" }: CardSkeletonProps) => {
   );
 };
 
+export const PostDetailSkeleton = () => {
+  return (
+    <article className="max-w-3xl mx-auto space-y-8 animate-pulse py-4">
+      {/* Header Bar Skeleton */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <div className="h-4 bg-neutral-200 rounded-md w-16" />
+          <div className="h-5 bg-neutral-200 rounded-md w-24" />
+        </div>
+        {/* Title */}
+        <div className="space-y-2 pt-2">
+          <div className="h-9 bg-neutral-200 rounded-lg w-full" />
+          <div className="h-9 bg-neutral-200 rounded-lg w-3/4" />
+        </div>
+        {/* Excerpt */}
+        <div className="space-y-2 pt-1">
+          <div className="h-4 bg-neutral-150 rounded-md w-full" />
+          <div className="h-4 bg-neutral-150 rounded-md w-2/3" />
+        </div>
+      </div>
+
+      {/* Featured Image Skeleton */}
+      <div className="w-full aspect-[16/9] rounded-xl bg-neutral-200" />
+
+      {/* Paragraphs Body Skeleton */}
+      <div className="space-y-4 pt-2">
+        <div className="h-4 bg-neutral-200 rounded-md w-full" />
+        <div className="h-4 bg-neutral-200 rounded-md w-11/12" />
+        <div className="h-4 bg-neutral-200 rounded-md w-4/5" />
+        <div className="h-4 bg-neutral-200 rounded-md w-full" />
+        <div className="h-4 bg-neutral-200 rounded-md w-3/4" />
+      </div>
+    </article>
+  );
+};
+
 export default CardSkeleton;

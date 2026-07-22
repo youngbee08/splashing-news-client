@@ -22,6 +22,7 @@ export interface Post {
   readingTime: string;
   likes: number;
   comments?: Comment[];
+  commentsCount?: number;
   isFeatured: boolean;
   publishedAt: string;
   createdAt?: string;
@@ -81,7 +82,7 @@ export interface CreatePostInput {
   content: string;
   category: string; // CATEGORY_ID
   status: "draft" | "published";
-  featuredImage?: string;
+  featuredImage?: File | string;
   excerpt?: string;
 }
 
@@ -150,6 +151,12 @@ export interface PostContextType {
 
   createPost: (data: CreatePostInput) => Promise<Post>;
   isCreatingPost: boolean;
+
+  updatePost: (id: string, data: Partial<CreatePostInput>) => Promise<Post>;
+  isUpdatingPost: boolean;
+
+  deletePost: (id: string) => Promise<void>;
+  isDeletingPost: boolean;
 
   likePost: (params: { id: string; action: "like" | "unlike" }) => void;
   isLikingPost: boolean;
