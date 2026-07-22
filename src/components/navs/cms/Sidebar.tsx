@@ -75,7 +75,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? "bg-[#dbeafe] text-blue-900 shadow-xs font-semibold"
+                    ? "bg-primary/10 text-primary shadow-xs font-semibold"
                     : "text-neutral-650 hover:bg-neutral-250/40 hover:text-neutral-900"
                 }`
               }

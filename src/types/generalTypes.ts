@@ -54,17 +54,31 @@ export interface User {
   role: string;
 }
 
+export interface RecentPost {
+  _id: string;
+  id: string;
+  title: string;
+  slug: string;
+  status: "published" | "draft";
+  createdAt: string;
+}
+
 export interface DashboardMetrics {
-  total_posts: number;
-  page_views: number;
-  activity_level: string;
+  totalPosts: number;
+  publishedPosts: number;
+  draftPosts: number;
+  totalComments: number;
+  totalCategories: number;
+  totalViews: number;
+  totalLikes: number;
+  recentPosts: RecentPost[];
 }
 
 export interface UserContextType {
   logout: () => void;
   user: User | null;
   token: string;
-  login: (token: string, user: User) => void;
+  login: (token: string, user: User, metrics: DashboardMetrics) => void;
   isLoggedIn: boolean;
   refreshUser: (token: string) => void;
   // refreshUser: (token: string) => Promise<void>;

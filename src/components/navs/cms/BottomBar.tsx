@@ -10,7 +10,7 @@ const BottomBar = () => {
         className={({ isActive }) =>
           `flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-all duration-200 ${
             isActive
-              ? "text-blue-900 font-semibold scale-105"
+              ? "text-primary font-semibold scale-105"
               : "text-neutral-500 hover:text-neutral-900"
           }`
         }
@@ -34,7 +34,7 @@ const BottomBar = () => {
         className={({ isActive }) =>
           `flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-all duration-200 ${
             isActive
-              ? "text-blue-900 font-semibold scale-105"
+              ? "text-primary font-semibold scale-105"
               : "text-neutral-500 hover:text-neutral-900"
           }`
         }

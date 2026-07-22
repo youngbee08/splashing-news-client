@@ -24,9 +24,9 @@ const Login: React.FC = () => {
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: async (data) => {
-      const { token, user } = data;
-      if (token && user) {
-        saveData(token, user);
+      const { token, user, metrics } = data;
+      if (token && user && metrics) {
+        saveData(token, user, metrics);
         toast.success("Log in successful");
         navigate("/admin/overview");
       } else {

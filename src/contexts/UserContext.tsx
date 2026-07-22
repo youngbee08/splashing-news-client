@@ -9,9 +9,14 @@ import { toast } from "sonner";
 import { setupInterceptors } from "../services/axios";
 
 const EMPTY_METRICS: DashboardMetrics = {
-  page_views: 0,
-  activity_level: "",
-  total_posts: 0,
+  totalPosts: 0,
+  publishedPosts: 0,
+  draftPosts: 0,
+  totalComments: 0,
+  totalCategories: 0,
+  totalViews: 0,
+  totalLikes: 0,
+  recentPosts: [],
 };
 
 const UserProvider = ({ children }: UserProviderProps) => {
@@ -98,12 +103,14 @@ const UserProvider = ({ children }: UserProviderProps) => {
     setupInterceptors(logout);
   }, [logout]);
 
-  const login = (token: string, userData: User) => {
+  const login = (token: string, userData: User, metrics: DashboardMetrics) => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("dashboardMetrics", JSON.stringify(metrics));
 
     setUser(userData);
     setToken(token);
+    setDashboardMetrics(metrics);
     setIsAuthenticated(true);
   };
 
