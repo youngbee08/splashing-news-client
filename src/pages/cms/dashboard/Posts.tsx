@@ -7,8 +7,7 @@ import {
   FiMoreVertical 
 } from "react-icons/fi";
 import { usePostContext } from "../../../hooks/UsePostContext";
-import Modal from "../../../components/modals/Modal";
-import { toast } from "sonner";
+import AddPostModal from "../../../components/modals/AddPostModal";
 import CardSkeleton from "../../../components/skeletons/CardSkeleton";
 import type { Post } from "../../../types/generalTypes";
 
@@ -18,9 +17,6 @@ const Posts = () => {
     isPostsLoading,
     categories,
     setPostsParams,
-    createPost,
-    isCreatingPost,
-    uploadMedia,
   } = usePostContext();
 
   const [search, setSearch] = useState("");
@@ -29,14 +25,8 @@ const Posts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-  // Create Modal Form States
+  // Create Modal Visibility State
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [newPostTitle, setNewPostTitle] = useState("");
-  const [newPostContent, setNewPostContent] = useState("");
-  const [newPostCategory, setNewPostCategory] = useState("");
-  const [newPostStatus, setNewPostStatus] = useState<"draft" | "published">("published");
-  const [imageUrl, setImageUrl] = useState("");
-  const [imageUploading, setImageUploading] = useState(false);
 
   // Sync component filter states with Context query parameters
   useEffect(() => {
@@ -65,54 +55,14 @@ const Posts = () => {
     }
   };
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setImageUploading(true);
-      const res = await uploadMedia(file);
-      setImageUrl(res.url);
-      toast.success("Image uploaded successfully");
-    } catch (err) {
-      toast.error("Failed to upload image");
-      console.error(err);
-    } finally {
-      setImageUploading(false);
-    }
-  };
-
-  const handleCreatePostSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newPostTitle || !newPostContent || !newPostCategory) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
-
-    try {
-      await createPost({
-        title: newPostTitle,
-        content: newPostContent,
-        category: newPostCategory,
-        status: newPostStatus,
-        featuredImage: imageUrl || "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600",
-      });
-
-      toast.success("Post created successfully");
-      setIsCreateModalOpen(false);
-      // Reset form
-      setNewPostTitle("");
-      setNewPostContent("");
-      setNewPostCategory("");
-      setNewPostStatus("published");
-      setImageUrl("");
-    } catch (err) {
-      toast.error("Failed to create post");
-      console.error(err);
-    }
-  };
-
   const formatDate = (dateStr?: string) => {
+    if (!dateStr) return "N/A";
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
     if (!dateStr) return "N/A";
     return new Date(dateStr).toLocaleDateString("en-US", {
       year: "numeric",
