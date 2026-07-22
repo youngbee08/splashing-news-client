@@ -45,7 +45,7 @@ const TopNav = () => {
   };
 
   return (
-    <header className="h-16 lg:h-20 flex items-center justify-between gap-3 px-4 sm:px-8 bg-white/80 backdrop-blur-md sticky top-0 z-30 flex-shrink-0 border-b border-neutral-100 lg:border-none">
+    <header className="h-16 lg:h-20 flex items-center justify-between gap-3 px-4 sm:px-8 bg-white/80 backdrop-blur-md sticky top-0 z-30 flex-shrink-0 border-b border-neutral-300">
       <div className="flex items-center gap-3 lg:hidden">
         <span className="font-serif font-black text-lg text-neutral-900 tracking-tight">
           Admin Console

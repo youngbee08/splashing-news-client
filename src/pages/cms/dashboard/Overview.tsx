@@ -1,13 +1,17 @@
 import { FiFileText, FiEye, FiZap, FiMoreVertical } from "react-icons/fi";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { MdEditDocument } from "react-icons/md";
+import { MdArrowOutward, MdEditDocument } from "react-icons/md";
 import { LuHeartHandshake } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../../hooks/UseUserContext";
 import { usePostsQuery } from "../../../hooks/usePostQueries";
 
 const Overview = () => {
-  const { dashboardMetrics } = useUserContext();
+  const { dashboardMetrics: contextMetrics } = useUserContext();
+  const savedMetrics = localStorage.getItem("dashboardMetrics");
+  const parsedMetrics = JSON.parse(savedMetrics ? savedMetrics : "");
+
+  const dashboardMetrics = parsedMetrics || contextMetrics;
   const { data: recentPostsData, isLoading: isRecentLoading } = usePostsQuery({
     limit: 5,
   });
@@ -118,7 +122,9 @@ const Overview = () => {
             className="text-xs font-semibold text-[#b91c1c] hover:underline flex items-center gap-1"
           >
             <span>View All</span>
-            <span>&rarr;</span>
+            <span>
+              <MdArrowOutward/>
+            </span>
           </Link>
         </div>
 
