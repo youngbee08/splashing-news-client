@@ -53,7 +53,7 @@ const Header = () => {
   const categoryItems =
     Array.isArray(categories) && categories.length > 0
       ? categories
-          .slice(0, 2)
+          .slice(0, 4)
           .filter((cat) => cat.isActive !== false)
           .map((cat) => ({
             name: cat.name,

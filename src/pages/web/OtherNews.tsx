@@ -24,7 +24,7 @@ const OtherNews = () => {
         </h1>
         <p className="text-neutral-500 text-sm mt-1.5 font-medium">
           Explore the latest news and updates in {cat}. Stay informed with the
-          most recent articles.{" "}
+          most recent posts.{" "}
         </p>
       </div>
 
