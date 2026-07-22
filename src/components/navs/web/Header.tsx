@@ -10,20 +10,17 @@ const Header = () => {
   const { categories } = usePostContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Live Search state
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const desktopSearchRef = useRef<HTMLDivElement>(null);
   const mobileSearchRef = useRef<HTMLDivElement>(null);
 
-  // Fetch search results from API when searchQuery is present
   const { data: searchResultsData, isLoading: isSearchLoading } = usePostsQuery(
     searchQuery.trim() ? { search: searchQuery.trim(), limit: 6 } : undefined,
   );
 
   const postsList = searchResultsData?.data || [];
 
-  // Close search dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -74,7 +71,6 @@ const Header = () => {
     <header className="bg-white border-b border-neutral-200 sticky top-0 z-40 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-18">
-          {/* Logo and Nav links */}
           <div className="flex items-center gap-10">
             <Link
               to="/"
@@ -84,7 +80,6 @@ const Header = () => {
               <span className="text-[#dc2626] ml-1.5">News</span>
             </Link>
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6">
               {webNavItems.map((link) => (
                 <NavLink key={link.name} to={link.path} className={linkClass}>
@@ -94,9 +89,7 @@ const Header = () => {
             </nav>
           </div>
 
-          {/* Search bar & Utility Icons */}
           <div className="flex items-center gap-4">
-            {/* Desktop Search Input & Dropdown */}
             <div ref={desktopSearchRef} className="relative hidden sm:block">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400">
                 <IoIosSearch className="w-4 h-4" />
@@ -226,14 +219,12 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div
           className="md:hidden border-t border-neutral-100 bg-white"
           id="mobile-menu"
         >
           <div className="px-4 pt-2 pb-4 space-y-1">
-            {/* Mobile Search Input & Live Results Dropdown */}
             <div ref={mobileSearchRef} className="relative mb-4 mt-1">
               <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400">
                 <IoIosSearch className="w-4 h-4" />
@@ -262,7 +253,6 @@ const Header = () => {
                 </button>
               )}
 
-              {/* Mobile Search Dropdown */}
               {isSearchOpen && searchQuery.trim().length > 0 && (
                 <div className="absolute left-0 right-0 top-full mt-2 bg-white border border-neutral-200 rounded-lg shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
                   <div className="px-3 py-2 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/60 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider">

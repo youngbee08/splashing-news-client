@@ -80,8 +80,7 @@ export interface UserContextType {
   token: string;
   login: (token: string, user: User, metrics: DashboardMetrics) => void;
   isLoggedIn: boolean;
-  refreshUser: (token: string) => void;
-  // refreshUser: (token: string) => Promise<void>;
+  refreshUser: (token?: string) => Promise<unknown>;
   loading: boolean;
   dashboardMetrics: DashboardMetrics;
 }

@@ -1,3 +1,4 @@
+import axios from "axios";
 import api from "../services/axios";
 import type {
   Category,
@@ -16,6 +17,16 @@ export const login = async (formData: { email: string; password: string }) => {
   if (res.status === 200) {
     return res.data;
   }
+};
+
+export const logoutApi = async () => {
+  const res = await api.post("/auth/logout", );
+  return res.data;
+};
+
+export const refreshTokenApi = async () => {
+  const res = await axios.get("/auth/refresh");
+  return res.data;
 };
 
 export const getCategories = async (): Promise<Category[]> => {

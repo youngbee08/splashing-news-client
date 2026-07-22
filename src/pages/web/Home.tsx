@@ -6,6 +6,7 @@ import PoliticsCard from "../../components/cards/PoliticsCard";
 import { usePostContext } from "../../hooks/UsePostContext";
 import CardSkeleton from "../../components/skeletons/CardSkeleton";
 import type { Post } from "../../types/generalTypes";
+import { MdArrowOutward } from "react-icons/md";
 
 const Home = () => {
   const { postsData, isPostsLoading } = usePostContext();
@@ -113,19 +114,7 @@ const Home = () => {
               className="text-[#dc2626] hover:text-[#b91c1c] text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 transition-colors"
             >
               Explore All
-              <svg
-                className="h-3 w-3"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
+             <MdArrowOutward/>
             </Link>
           </div>
 

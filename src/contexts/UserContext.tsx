@@ -7,6 +7,7 @@ import type {
 } from "../types/generalTypes";
 import { toast } from "sonner";
 import { setupInterceptors } from "../services/axios";
+import { logoutApi, refreshTokenApi } from "../utils/apiUtility";
 
 const EMPTY_METRICS: DashboardMetrics = {
   totalPosts: 0,
@@ -27,53 +28,59 @@ const UserProvider = ({ children }: UserProviderProps) => {
   const [dashboardMetrics, setDashboardMetrics] =
     useState<DashboardMetrics>(EMPTY_METRICS);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
     const logoutToast = toast.loading("Logging out");
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("dashboardMetrics");
-    setUser(null);
-    setToken("");
-    setIsAuthenticated(false);
-    setDashboardMetrics(EMPTY_METRICS);
-    toast.dismiss(logoutToast);
-    toast.success("Logged out successfully");
-    window.location.href = "/auth/admin-login";
+    try {
+      await logoutApi();
+    } catch (err) {
+      console.error("Logout API call error:", err);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("dashboardMetrics");
+      setUser(null);
+      setToken("");
+      setIsAuthenticated(false);
+      setDashboardMetrics(EMPTY_METRICS);
+      toast.dismiss(logoutToast);
+      toast.success("Logged out successfully");
+      window.location.href = "/auth/admin-login";
+    }
   }, []);
 
-  // const refreshUser = useCallback(
-  //   async (token: string) => {
-  //     if (!token) throw new Error("No token");
+  const refreshUser = useCallback(async () => {
+    try {
+      const data = await refreshTokenApi();
+      const { token: newToken, user: userData, metrics } = data || {};
 
-  //     try {
-  //       const response = await api.get("/user", {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
+      if (newToken && userData) {
+        localStorage.setItem("token", newToken);
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData);
+        setToken(newToken);
 
-  //       const { data } = response.data;
-
-  //       setUser(data);
-  //       localStorage.setItem("user", JSON.stringify(data));
-  //     } catch (err: unknown) {
-  //       console.error("Failed to refresh user:", err);
-  //       if (axios.isAxiosError(err) && err.response?.status === 401) {
-  //         logout();
-  //       }
-  //       throw err;
-  //     }
-  //   },
-  //   [logout],
-  // );
+        if (metrics) {
+          localStorage.setItem("dashboardMetrics", JSON.stringify(metrics));
+          setDashboardMetrics(metrics);
+        }
+        setIsAuthenticated(true);
+        return data;
+      }
+    } catch (err: unknown) {
+      console.error("Failed to refresh user session:", err);
+      // logout();
+      throw err;
+    }
+  }, [logout]);
 
   useEffect(() => {
     const initAuth = async () => {
       setLoading(true);
       const storedToken = localStorage.getItem("token");
       const storedUser = localStorage.getItem("user");
+      const storedMetrics = localStorage.getItem("dashboardMetrics");
 
-      if (!storedToken || !storedUser) {
+      if (!storedToken || !storedUser || !storedMetrics) {
         setLoading(false);
         return;
       }
@@ -82,14 +89,15 @@ const UserProvider = ({ children }: UserProviderProps) => {
         const parsedUser = JSON.parse(storedUser);
         setToken(storedToken);
         setUser(parsedUser);
+        setDashboardMetrics(JSON.parse(storedMetrics));
 
-        // await refreshUser(storedToken);
 
+        await refreshUser();
         setIsAuthenticated(true);
       } catch (error: unknown) {
         console.warn("Invalid or expired session. Clearing...");
         console.error("Session error details:", error);
-        logout();
+        // logout();
         setIsAuthenticated(false);
       } finally {
         setLoading(false);
@@ -97,7 +105,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
     };
 
     initAuth();
-  }, [logout]);
+  }, [logout, refreshUser]);
 
   useEffect(() => {
     setupInterceptors(logout);
@@ -120,9 +128,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
     token,
     login,
     isLoggedIn: isAuthenticated,
-    refreshUser: (token: string) => {
-      console.log(token);
-    },
+    refreshUser,
     loading,
     dashboardMetrics,
   };
