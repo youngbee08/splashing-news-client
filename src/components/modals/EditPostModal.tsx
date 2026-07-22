@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
 import { FiUploadCloud, FiCheck } from "react-icons/fi";
 import { usePostContext } from "../../hooks/UsePostContext";
 import Modal from "./Modal";
 import { toast } from "sonner";
 import type { Post } from "../../types/generalTypes";
+import { getErrorMessage } from "../../services/axios";
 
 interface EditPostModalProps {
   post: Post | null;
@@ -11,27 +14,64 @@ interface EditPostModalProps {
   onClose: () => void;
 }
 
+const validationSchema = yup.object({
+  title: yup.string().required("Post title is required"),
+  category: yup.string().required("Category is required"),
+  status: yup
+    .string()
+    .oneOf(["published", "draft"])
+    .required("Status is required"),
+  content: yup.string().required("Post content is required"),
+});
+
 const EditPostModal = ({ post, isOpen, onClose }: EditPostModalProps) => {
   const { categories, updatePost, isUpdatingPost } = usePostContext();
-
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [status, setStatus] = useState<"draft" | "published">("published");
-  const [content, setContent] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      category: "",
+      status: "published" as "published" | "draft",
+      content: "",
+    },
+    enableReinitialize: true,
+    validationSchema,
+    onSubmit: async (values) => {
+      if (!post) return;
+      try {
+        await updatePost(post._id, {
+          title: values.title.trim(),
+          content: values.content.trim(),
+          category: values.category,
+          status: values.status,
+          featuredImage: imageFile || imagePreview,
+        });
+
+        toast.success("Post updated successfully!");
+        onClose();
+      } catch (err) {
+        toast.error(getErrorMessage(err, "Failed to update post"));
+      }
+    },
+  });
+
   useEffect(() => {
     if (post) {
-      setTitle(post.title || "");
       const catId =
         typeof post.category === "object"
           ? post.category?._id
           : post.category || "";
-      setCategory(catId || "");
-      setStatus(post.status || "published");
-      setContent(post.content || "");
+
+      formik.setValues({
+        title: post.title || "",
+        category: catId || "",
+        status: (post.status as "published" | "draft") || "published",
+        content: post.content || "",
+      });
+
       setImagePreview(post.featuredImage || "");
       setImageFile(null);
     }
@@ -46,30 +86,6 @@ const EditPostModal = ({ post, isOpen, onClose }: EditPostModalProps) => {
     }
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim() || !content.trim() || !category) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
-
-    try {
-      await updatePost(post._id, {
-        title: title.trim(),
-        content: content.trim(),
-        category,
-        status,
-        featuredImage: imageFile || imagePreview,
-      });
-
-      toast.success("Post updated successfully!");
-      onClose();
-    } catch (err) {
-      toast.error("Failed to update post");
-      console.error(err);
-    }
   };
 
   return (
@@ -88,7 +104,7 @@ const EditPostModal = ({ post, isOpen, onClose }: EditPostModalProps) => {
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="space-y-5 text-xs">
+        <form onSubmit={formik.handleSubmit} className="space-y-5 text-xs">
           {/* Post Title */}
           <div>
             <label className="block text-neutral-600 font-bold uppercase tracking-wider mb-1.5 text-xs">
@@ -96,12 +112,22 @@ const EditPostModal = ({ post, isOpen, onClose }: EditPostModalProps) => {
             </label>
             <input
               type="text"
-              required
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:bg-white focus:border-neutral-400 focus:ring-2 focus:ring-blue-500/10 transition-all font-medium"
+              name="title"
+              value={formik.values.title}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={`w-full px-4 py-3 bg-neutral-50 border ${
+                formik.touched.title && formik.errors.title
+                  ? "border-red-500 focus:ring-red-100"
+                  : "border-neutral-200 focus:border-neutral-400 focus:ring-2 focus:ring-blue-500/10"
+              } rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none transition-all font-medium`}
               placeholder="Enter post title"
             />
+            {formik.touched.title && formik.errors.title && (
+              <span className="text-red-500 text-xs font-medium mt-1 block">
+                {formik.errors.title}
+              </span>
+            )}
           </div>
 
           {/* Category & Status */}
@@ -111,10 +137,15 @@ const EditPostModal = ({ post, isOpen, onClose }: EditPostModalProps) => {
                 Category <span className="text-red-600">*</span>
               </label>
               <select
-                required
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:bg-white focus:border-neutral-400 focus:ring-2 focus:ring-blue-500/10 transition-all font-medium"
+                name="category"
+                value={formik.values.category}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`w-full px-4 py-3 bg-neutral-50 border ${
+                  formik.touched.category && formik.errors.category
+                    ? "border-red-500 focus:ring-red-100"
+                    : "border-neutral-200 focus:border-neutral-400"
+                } rounded-lg text-sm text-neutral-800 focus:outline-none cursor-pointer transition-all font-medium`}
               >
                 <option value="">Select a Category</option>
                 {categories?.map((cat) => (
@@ -123,6 +154,11 @@ const EditPostModal = ({ post, isOpen, onClose }: EditPostModalProps) => {
                   </option>
                 ))}
               </select>
+              {formik.touched.category && formik.errors.category && (
+                <span className="text-red-500 text-xs font-medium mt-1 block">
+                  {formik.errors.category}
+                </span>
+              )}
             </div>
 
             <div>
@@ -130,11 +166,11 @@ const EditPostModal = ({ post, isOpen, onClose }: EditPostModalProps) => {
                 Status
               </label>
               <select
-                value={status}
-                onChange={(e) =>
-                  setStatus(e.target.value as "draft" | "published")
-                }
-                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:bg-white focus:border-neutral-400 focus:ring-2 focus:ring-blue-500/10 transition-all font-medium"
+                name="status"
+                value={formik.values.status}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-800 focus:outline-none focus:border-neutral-400 cursor-pointer transition-all font-medium"
               >
                 <option value="published">Published</option>
                 <option value="draft">Draft</option>
@@ -223,13 +259,23 @@ const EditPostModal = ({ post, isOpen, onClose }: EditPostModalProps) => {
               Post Content <span className="text-red-600">*</span>
             </label>
             <textarea
-              required
               rows={6}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:bg-white focus:border-neutral-400 focus:ring-2 focus:ring-blue-500/10 transition-all font-medium"
+              name="content"
+              value={formik.values.content}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={`w-full px-4 py-3 bg-neutral-50 border ${
+                formik.touched.content && formik.errors.content
+                  ? "border-red-500 focus:ring-red-100"
+                  : "border-neutral-200 focus:border-neutral-400 focus:ring-2 focus:ring-blue-500/10"
+              } rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none transition-all font-medium`}
               placeholder="Enter post content..."
             />
+            {formik.touched.content && formik.errors.content && (
+              <span className="text-red-500 text-xs font-medium mt-1 block">
+                {formik.errors.content}
+              </span>
+            )}
           </div>
 
           {/* Actions */}
@@ -243,7 +289,7 @@ const EditPostModal = ({ post, isOpen, onClose }: EditPostModalProps) => {
             </button>
             <button
               type="submit"
-              disabled={isUpdatingPost}
+              disabled={!formik.isValid || isUpdatingPost}
               className="px-5 py-2 bg-[#b91c1c] hover:bg-[#991b1b] text-white rounded-lg font-semibold transition-all disabled:opacity-50 cursor-pointer shadow-xs text-xs"
             >
               {isUpdatingPost ? "Saving Changes..." : "Save Changes"}

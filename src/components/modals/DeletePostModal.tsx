@@ -3,6 +3,7 @@ import { usePostContext } from "../../hooks/UsePostContext";
 import Modal from "./Modal";
 import { toast } from "sonner";
 import type { Post } from "../../types/generalTypes";
+import { getErrorMessage } from "../../services/axios";
 
 interface DeletePostModalProps {
   post: Post | null;
@@ -21,8 +22,7 @@ const DeletePostModal = ({ post, isOpen, onClose }: DeletePostModalProps) => {
       toast.success("Post deleted successfully");
       onClose();
     } catch (err) {
-      toast.error("Failed to delete post");
-      console.error(err);
+      toast.error(getErrorMessage(err, "Failed to delete post"));
     }
   };
 

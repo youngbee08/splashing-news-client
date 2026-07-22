@@ -1,4 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as yup from "yup";
 import { usePostContext } from "../../hooks/UsePostContext";
 import { usePostBySlugQuery } from "../../hooks/usePostQueries";
 import { toast } from "sonner";
@@ -7,14 +9,43 @@ import { FiChevronDown } from "react-icons/fi";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { PostDetailSkeleton } from "../../components/skeletons/CardSkeleton";
+import { timeAgo } from "../../utils/formatterUtility";
+
+const commentValidationSchema = yup.object({
+  name: yup.string().required("Your name is required"),
+  message: yup.string().required("Comment message is required"),
+});
 
 const PostDetail = () => {
   const navigate = useNavigate();
   const [postLiked, setPostLiked] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const { slug } = useParams<{ slug: string }>();
-  const { likePost } = usePostContext();
+  const { likePost, addComment, isAddingComment } = usePostContext();
   const { data: post, isLoading: isPostLoading } = usePostBySlugQuery(slug);
+
+  const commentFormik = useFormik({
+    initialValues: {
+      name: "",
+      message: "",
+    },
+    validationSchema: commentValidationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      if (!post) return;
+      try {
+        await addComment({
+          name: values.name.trim(),
+          message: values.message.trim(),
+          postId: post._id,
+        });
+        toast.success("Comment posted successfully!");
+        resetForm();
+      } catch (err) {
+        toast.error("Failed to post comment");
+        console.error(err);
+      }
+    },
+  });
 
   if (isPostLoading) {
     return <PostDetailSkeleton />;
@@ -155,7 +186,7 @@ const PostDetail = () => {
               <p key={idx} className="font-normal text-neutral-750">
                 {pText}
               </p>
-            )
+            ),
           )}
         </div>
 
@@ -212,35 +243,63 @@ const PostDetail = () => {
           </h3>
 
           <form
-            onSubmit={() => {}}
+            onSubmit={commentFormik.handleSubmit}
             className="bg-neutral-50 border border-neutral-200 rounded-lg p-5 space-y-4"
           >
             <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-widest">
               Join the conversation
             </h4>
-            <div className="grid grid-cols-1 gap-4">
-              <input
-                type="text"
-                placeholder="Your Name"
-                required
-                value={""}
-                // onChange={(e) => setAuthorName(e.target.value)}
-                className="w-full px-3.5 py-2 bg-white border border-neutral-250 rounded-md text-sm text-neutral-800 placeholder-neutral-450 focus:outline-none focus:border-neutral-450 transition-all shadow-xs"
-              />
-              <textarea
-                placeholder="Write your comment..."
-                required
-                rows={3}
-                value={""}
-                // onChange={(e) => setCommentText(e.target.value)}
-                className="w-full px-3.5 py-2 bg-white border border-neutral-250 rounded-md text-sm text-neutral-800 placeholder-neutral-450 focus:outline-none focus:border-neutral-450 transition-all shadow-xs"
-              ></textarea>
+            <div className="grid grid-cols-1 gap-3">
+              <div>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  value={commentFormik.values.name}
+                  onChange={commentFormik.handleChange}
+                  onBlur={commentFormik.handleBlur}
+                  className={`w-full px-3.5 py-2 bg-white border ${
+                    commentFormik.touched.name && commentFormik.errors.name
+                      ? "border-red-500 focus:ring-red-100"
+                      : "border-neutral-250 focus:border-neutral-450"
+                  } rounded-md text-sm text-neutral-800 placeholder-neutral-450 focus:outline-none transition-all shadow-xs`}
+                />
+                {commentFormik.touched.name && commentFormik.errors.name && (
+                  <span className="text-red-500 text-xs font-medium mt-1 block">
+                    {commentFormik.errors.name}
+                  </span>
+                )}
+              </div>
+
+              <div>
+                <textarea
+                  name="message"
+                  placeholder="Write your comment..."
+                  rows={3}
+                  value={commentFormik.values.message}
+                  onChange={commentFormik.handleChange}
+                  onBlur={commentFormik.handleBlur}
+                  className={`w-full px-3.5 py-2 bg-white border ${
+                    commentFormik.touched.message &&
+                    commentFormik.errors.message
+                      ? "border-red-500 focus:ring-red-100"
+                      : "border-neutral-250 focus:border-neutral-450"
+                  } rounded-md text-sm text-neutral-800 placeholder-neutral-450 focus:outline-none transition-all shadow-xs`}
+                />
+                {commentFormik.touched.message &&
+                  commentFormik.errors.message && (
+                    <span className="text-red-500 text-xs font-medium mt-1 block">
+                      {commentFormik.errors.message}
+                    </span>
+                  )}
+              </div>
             </div>
             <button
               type="submit"
-              className="bg-[#dc2626] hover:bg-[#b91c1c] text-white text-xs font-semibold px-5 py-2.5 rounded-md transition-colors shadow-sm"
+              disabled={!commentFormik.isValid || isAddingComment}
+              className="bg-[#dc2626] hover:bg-[#b91c1c] text-white text-xs font-semibold px-5 py-2.5 rounded-md transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
             >
-              Post Comment
+              {isAddingComment ? "Posting..." : "Post Comment"}
             </button>
           </form>
 
@@ -259,7 +318,7 @@ const PostDetail = () => {
                       {comment.name}
                     </span>
                     <span className="text-[10px] text-neutral-400 font-medium">
-                      {comment.createdAt}
+                      {timeAgo(comment.createdAt)}
                     </span>
                   </div>
                   <p className="text-xs sm:text-sm text-neutral-600 leading-normal">

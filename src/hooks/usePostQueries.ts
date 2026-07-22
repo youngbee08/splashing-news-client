@@ -66,8 +66,13 @@ export const useCreatePostMutation = () => {
 export const useUpdatePostMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<CreatePostInput> }) =>
-      updatePost(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Partial<CreatePostInput>;
+    }) => updatePost(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
@@ -101,7 +106,7 @@ export const useAddCommentMutation = () => {
   return useMutation({
     mutationFn: (data: CommentInput) => addComment(data),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["post", variables.postId] });
+      queryClient.invalidateQueries({ queryKey: ["post"] });
       queryClient.invalidateQueries({
         queryKey: ["comments", variables.postId],
       });

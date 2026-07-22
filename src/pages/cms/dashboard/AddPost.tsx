@@ -1,20 +1,56 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { FiUploadCloud, FiCheck } from "react-icons/fi";
 import { usePostContext } from "../../../hooks/UsePostContext";
 import { toast } from "sonner";
+import { getErrorMessage } from "../../../services/axios";
+
+const validationSchema = yup.object({
+  title: yup.string().required("Post title is required"),
+  category: yup.string().required("Category is required"),
+  status: yup
+    .string()
+    .oneOf(["published", "draft"])
+    .required("Status is required"),
+  content: yup.string().required("Post content is required"),
+});
 
 const AddPost = () => {
   const navigate = useNavigate();
   const { categories, createPost, isCreatingPost } = usePostContext();
-
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [status, setStatus] = useState<"draft" | "published">("published");
-  const [content, setContent] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      category: "",
+      status: "published" as "published" | "draft",
+      content: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      try {
+        await createPost({
+          title: values.title.trim(),
+          content: values.content.trim(),
+          category: values.category,
+          status: values.status,
+          featuredImage: imageFile || imagePreview,
+        });
+
+        toast.success("Post created successfully!");
+        navigate("/admin/posts");
+      } catch (err) {
+        toast.error(
+          getErrorMessage(err, "Failed to create post. Please try again."),
+        );
+      }
+    },
+  });
 
   const handleFileSelected = (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -23,30 +59,6 @@ const AddPost = () => {
     }
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim() || !content.trim() || !category) {
-      toast.error("Please fill in all required fields (Title, Category, and Content)");
-      return;
-    }
-
-    try {
-      await createPost({
-        title: title.trim(),
-        content: content.trim(),
-        category,
-        status,
-        featuredImage: imageFile || imagePreview,
-      });
-
-      toast.success("Post created successfully!");
-      navigate("/admin/posts");
-    } catch (err) {
-      toast.error("Failed to create post. Please try again.");
-      console.error(err);
-    }
   };
 
   return (
@@ -62,7 +74,7 @@ const AddPost = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={formik.handleSubmit} className="space-y-6">
         <div className="flex flex-col gap-6">
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-neutral-600 font-body block mb-2">
@@ -70,12 +82,22 @@ const AddPost = () => {
             </label>
             <input
               type="text"
-              required
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              name="title"
+              value={formik.values.title}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               placeholder="e.g. Breakthrough Innovations Announced in Green Energy Tech"
-              className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:bg-white focus:border-neutral-400 focus:ring-2 focus:ring-blue-500/10 transition-all font-medium"
+              className={`w-full px-4 py-3 bg-neutral-50 border ${
+                formik.touched.title && formik.errors.title
+                  ? "border-red-500 focus:ring-red-100"
+                  : "border-neutral-200 focus:border-neutral-400 focus:ring-blue-500/10"
+              } rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 transition-all font-medium`}
             />
+            {formik.touched.title && formik.errors.title && (
+              <span className="text-red-500 text-xs font-medium mt-1 block">
+                {formik.errors.title}
+              </span>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -84,10 +106,15 @@ const AddPost = () => {
                 Category <span className="text-red-700">*</span>
               </label>
               <select
-                required
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-800 focus:outline-none focus:bg-white focus:border-neutral-400 cursor-pointer transition-all font-medium"
+                name="category"
+                value={formik.values.category}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`w-full px-4 py-3 bg-neutral-50 border ${
+                  formik.touched.category && formik.errors.category
+                    ? "border-red-500 focus:ring-red-100"
+                    : "border-neutral-200 focus:border-neutral-400"
+                } rounded-lg text-sm text-neutral-800 focus:outline-none cursor-pointer transition-all font-medium`}
               >
                 <option value="">Select a Category</option>
                 {categories?.map((cat) => (
@@ -96,6 +123,11 @@ const AddPost = () => {
                   </option>
                 ))}
               </select>
+              {formik.touched.category && formik.errors.category && (
+                <span className="text-red-500 text-xs font-medium mt-1 block">
+                  {formik.errors.category}
+                </span>
+              )}
             </div>
 
             <div>
@@ -103,11 +135,11 @@ const AddPost = () => {
                 Publish Status
               </label>
               <select
-                value={status}
-                onChange={(e) =>
-                  setStatus(e.target.value as "draft" | "published")
-                }
-                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-800 focus:outline-none focus:bg-white focus:border-neutral-400 cursor-pointer transition-all font-medium"
+                name="status"
+                value={formik.values.status}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-800 focus:outline-none focus:border-neutral-400 cursor-pointer transition-all font-medium"
               >
                 <option value="published">Published</option>
                 <option value="draft">Draft</option>
@@ -115,7 +147,6 @@ const AddPost = () => {
             </div>
           </div>
 
-          {/* Dotted Border Large Image Input */}
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-neutral-600 font-body block mb-2">
               Featured Cover Image
@@ -190,23 +221,31 @@ const AddPost = () => {
             </div>
           </div>
 
-          {/* Post Content */}
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-neutral-600 font-body block mb-2">
               Post Content <span className="text-red-700">*</span>
             </label>
             <textarea
-              required
               rows={10}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+              name="content"
+              value={formik.values.content}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               placeholder="Write the full content of your post here..."
-              className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:bg-white focus:border-neutral-400 focus:ring-2 focus:ring-blue-500/10 transition-all font-sans leading-relaxed"
+              className={`w-full px-4 py-3 bg-neutral-50 border ${
+                formik.touched.content && formik.errors.content
+                  ? "border-red-500 focus:ring-red-100"
+                  : "border-neutral-200 focus:border-neutral-400 focus:ring-blue-500/10"
+              } rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 transition-all font-sans leading-relaxed`}
             />
+            {formik.touched.content && formik.errors.content && (
+              <span className="text-red-500 text-xs font-medium mt-1 block">
+                {formik.errors.content}
+              </span>
+            )}
           </div>
         </div>
 
-        {/* Form Action Buttons */}
         <div className="flex items-center justify-end gap-3 pt-2">
           <button
             type="button"
@@ -217,7 +256,7 @@ const AddPost = () => {
           </button>
           <button
             type="submit"
-            disabled={isCreatingPost}
+            disabled={!formik.isValid || isCreatingPost}
             className="px-6 py-2.5 bg-[#b91c1c] hover:bg-[#991b1b] text-white rounded-lg font-semibold transition-all disabled:opacity-50 cursor-pointer shadow-xs text-xs"
           >
             {isCreatingPost ? "Creating post..." : "Create Post"}
