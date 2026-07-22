@@ -1,9 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "../components/navs/cms/Sidebar";
 import TopNav from "../components/navs/cms/TopNav";
 import BottomBar from "../components/navs/cms/BottomBar";
+import { useEffect } from "react";
 
 const CMSLayout = () => {
+   const location = useLocation();
+   useEffect(() => {
+     window.scrollTo({ top: 0, behavior: "smooth" });
+   }, [location]);
   return (
     <div className="min-h-screen flex bg-white font-sans text-neutral-800 antialiased relative">
       {/* Desktop Left Sidebar */}

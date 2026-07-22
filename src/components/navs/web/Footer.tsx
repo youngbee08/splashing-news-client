@@ -69,6 +69,18 @@ const Footer = () => {
         <div className="border-t border-neutral-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-neutral-500">
           <p>© {currentYear} Splashing News. All rights reserved.</p>
 
+          <p className="text-neutral-450">
+            Built by{" "}
+            <a
+              href="https://zenithdevtech.name.ng"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-300 hover:text-[#dc2626] font-semibold transition-colors underline underline-offset-4 decoration-neutral-800 hover:decoration-[#dc2626]"
+            >
+              Zenith Dev
+            </a>
+          </p>
+
           <div className="flex items-center gap-6">
             <button
               onClick={scrollToTop}

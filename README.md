@@ -1,75 +1,45 @@
-# React + TypeScript + Vite
+# Splashing News - Frontend Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Splashing News is a modern news platform that serves readers with current stories and gives editors an easy-to-use dashboard to manage content. Readers can browse headlines, explore categories, and read full articles, while administrators can publish, edit, and track posts from any device. The interface stays fast and intuitive even with large volumes of content, so the focus stays on the stories themselves.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This is the client-side application that powers the Splashing News website. It combines a public-facing news experience with a protected admin console, all in one React application. On the public side, visitors can explore the latest news, filter by categories like Politics or Business, search for articles, and view detailed posts with images and engagement stats. The admin area gives editorial staff a dashboard to see metrics, manage posts (create, edit, delete), and monitor publication activity. The entire app is built to feel fast, with skeleton loaders, toast notifications, and responsive design that works well on mobile, tablet, and desktop.
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Public news browsing** — Homepage with hero articles, sub-hero highlights, latest news, and category-specific sections.
+- **Category navigation** — Dedicated routes for topics like Politics, Business, Health, Sports, and more.
+- **Article detail view** — Full post content with featured images, view counts, likes, comments, and reading time.
+- **Search** — Instant search from the admin top bar that fetches results as you type and links directly to posts.
+- **Skeleton loading states** — Custom skeleton cards and table skeletons keep the interface feeling responsive while data loads.
+- **Admin dashboard** — Overview with stats (total posts, views, categories, published/draft counts, recent articles).
+- **Posts management** — Table view with search, filter by category and status, pagination, edit and delete actions.
+- **Create and edit posts** — Form with title, category selection, status, featured image upload (drag-and-drop supported), and content body.
+- **Modal dialogs** — Edit and delete confirmations appear in accessible, branded modals.
+- **Authentication flow** — Login form with validation, token storage, session refresh, and automatic logout on expiration or network errors.
+- **Responsive design** — Fully responsive layouts with a mobile-friendly bottom navigation in the CMS and a clean public grid.
+- **Toast notifications** — User feedback for successes, errors, and loading states via `sonner`.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Technology | Purpose |
+|------------|---------|
+| [React](https://react.dev) | UI library |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe JavaScript |
+| [Vite](https://vitejs.dev) | Build tool and dev server |
+| [TailwindCSS](https://tailwindcss.com) | Utility-first CSS framework |
+| [Axios](https://axios-http.com) | HTTP client for API requests |
+| [TanStack React Query](https://tanstack.com/query) | Server-state management and caching |
+| [React Router](https://reactrouter.com) | Client-side routing |
+| [Formik](https://formik.org) | Form state management |
+| [Yup](https://github.com/jquense/yup) | Schema-based form validation |
+| [Sonner](https://sonner.emilkowal.ski) | Toast notifications |
+| [Lucide React](https://lucide.dev) | Icon set |
+| [React Icons](https://react-icons.github.io/react-icons) | Additional icon library |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+## Author Info
+**Zenith Dev**
+- Email: [hello@zenithdevtech.name.ng](mailto:hello@zenithdevtech.name.ng)
+- Website: [Zenith Dev Tech](https://zenithdevtech.name.ng)
+- GitHub: [youngbeeh08](https://github.com/youngbeeh08)
