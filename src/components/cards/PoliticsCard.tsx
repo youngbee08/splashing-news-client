@@ -19,10 +19,13 @@ const PoliticsCard = ({ post }: PoliticsCardProps) => {
           loading="lazy"
         />
       </div>
-      
-      <div className="p-4 flex-grow flex flex-col justify-center">
+
+      <div className="p-4 flex-grow flex flex-col gap-2 justify-center">
         <h3 className="font-heading font-bold text-sm sm:text-base text-neutral-900 leading-snug group-hover:text-[#dc2626] transition-colors line-clamp-2">
           {post.title}
+        </h3>
+        <h3 className="font-heading font-semibold text-sm sm:text-base text-neutral-600! leading-snug group-hover:text-[#dc2626] transition-colors line-clamp-2">
+          {post.content}
         </h3>
       </div>
     </Link>

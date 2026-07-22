@@ -10,13 +10,8 @@ const LatestNewsCard = ({ post }: LatestNewsCardProps) => {
     typeof post.category === "object" && post.category !== null
       ? post.category.name
       : typeof post.category === "string"
-      ? post.category
-      : "General";
-
-  const authorName =
-    typeof post.author === "object" && post.author !== null
-      ? post.author.fullname || post.author.name || "Admin"
-      : post.author || "Admin";
+        ? post.category
+        : "General";
 
   return (
     <Link
@@ -31,7 +26,7 @@ const LatestNewsCard = ({ post }: LatestNewsCardProps) => {
           loading="lazy"
         />
       </div>
-      
+
       <div className="p-5 flex-grow flex flex-col justify-between">
         <div className="space-y-2">
           <span className="text-[10px] font-bold text-[#dc2626] uppercase tracking-widest block">
@@ -41,14 +36,12 @@ const LatestNewsCard = ({ post }: LatestNewsCardProps) => {
             {post.title}
           </h3>
           <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
-            {post.excerpt}
+            {post.content}
           </p>
         </div>
-        
+
         <div className="flex items-center gap-2 text-xs font-semibold text-neutral-450 border-t border-neutral-100 pt-4 mt-4">
-          <span>By {authorName}</span>
-          <span>•</span>
-          <span>{post.readingTime}</span>
+          <span>By Splashing news</span>
         </div>
       </div>
     </Link>

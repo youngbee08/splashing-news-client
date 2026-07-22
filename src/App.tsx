@@ -8,6 +8,7 @@ import Login from "./pages/cms/auth/Login";
 import { Toaster } from "sonner";
 import Overview from "./pages/cms/dashboard/Overview";
 import Posts from "./pages/cms/dashboard/Posts";
+import AddPost from "./pages/cms/dashboard/AddPost";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import OtherNews from "./pages/web/OtherNews";
 
@@ -30,6 +31,7 @@ const App = () => {
           <Route element={<CMSLayout />}>
             <Route path="/admin/overview" element={<Overview />} />
             <Route path="/admin/posts" element={<Posts />} />
+            <Route path="/admin/add-post" element={<AddPost />} />
           </Route>
         </Route>
 

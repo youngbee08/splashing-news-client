@@ -18,7 +18,6 @@ import type {
   PostQueryOptions,
 } from "../types/generalTypes";
 
-// Categories Hooks
 export const useCategoriesQuery = () => {
   return useQuery({
     queryKey: ["categories"],
@@ -65,7 +64,6 @@ export const useLikePostMutation = () => {
   });
 };
 
-// Comments Hooks
 export const useAddCommentMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -79,14 +77,12 @@ export const useAddCommentMutation = () => {
   });
 };
 
-// Media Hooks
 export const useUploadMediaMutation = () => {
   return useMutation({
     mutationFn: (file: File) => uploadMedia(file),
   });
 };
 
-// Settings Hooks
 export const useSettingsQuery = () => {
   return useQuery({
     queryKey: ["settings"],

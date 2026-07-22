@@ -12,6 +12,7 @@ const navItems: NavItem[] = [
   // CMS Nav Items
   { name: "Dashboard", path: "/admin/overview", type: "cms", icon: "Dashboard" },
   { name: "Posts", path: "/admin/posts", type: "cms", icon: "Posts" },
+  { name: "Add Post", path: "/admin/add-post", type: "cms", icon: "AddPost" },
 ];
 
 export default navItems;

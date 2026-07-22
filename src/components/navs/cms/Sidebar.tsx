@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import navItems from "../../../utils/navItems";
 import {
   FiGrid,
@@ -12,6 +12,7 @@ import {
   FiPlus,
 } from "react-icons/fi";
 import { useUserContext } from "../../../hooks/UseUserContext";
+import { TiDocumentAdd } from "react-icons/ti";
 
 const getIcon = (iconName?: string) => {
   switch (iconName) {
@@ -19,6 +20,8 @@ const getIcon = (iconName?: string) => {
       return <FiGrid className="w-4.5 h-4.5" />;
     case "Posts":
       return <FiFileText className="w-4.5 h-4.5" />;
+    case "AddPost":
+      return <TiDocumentAdd className="w-4.5 h-4.5" />;
     case "Categories":
       return <FiFolder className="w-4.5 h-4.5" />;
     case "Media":
@@ -41,6 +44,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ onClose }: SidebarProps) => {
+  const navigate = useNavigate();
   const mainCmsItems = navItems.filter(
     (item) => item.type === "cms" && !item.isBottom,
   );
@@ -86,7 +90,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
       <div className="space-y-3 pt-4">
         <button
           onClick={() => {
-            console.log("Create new post clicked");
+            navigate("/admin/add-post");
             handleNavClick();
           }}
           className="w-full flex items-center justify-center gap-2 bg-[#b91c1c] hover:bg-[#991b1b] text-white py-3 px-4 rounded-lg text-sm font-semibold shadow-xs hover:shadow-sm transition-all duration-250 cursor-pointer"

@@ -20,15 +20,13 @@ const BottomBar = () => {
       </NavLink>
 
       {/* Create New Post Action CTA Pill */}
-      <button
-        onClick={() => {
-          console.log("Create new post clicked from bottom bar");
-        }}
+      <NavLink
+        to="/admin/add-post"
         className="flex items-center justify-center w-12 h-12 bg-gradient-to-tr from-[#b91c1c] to-red-600 text-white rounded-full shadow-md shadow-red-900/20 active:scale-95 transition-all duration-200 cursor-pointer -mt-5 border-2 border-white"
         aria-label="Create New Post"
       >
         <FiPlus className="w-6 h-6" />
-      </button>
+      </NavLink>
 
       {/* Posts Link */}
       <NavLink

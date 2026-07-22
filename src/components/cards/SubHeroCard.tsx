@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { Post } from "../../types/generalTypes";
+import { timeAgo } from "../../utils/formatterUtility";
 
 interface SubHeroCardProps {
   post: Post;
@@ -10,8 +11,8 @@ const SubHeroCard = ({ post }: SubHeroCardProps) => {
     typeof post.category === "object" && post.category !== null
       ? post.category.name
       : typeof post.category === "string"
-      ? post.category
-      : "General";
+        ? post.category
+        : "General";
 
   return (
     <Link
@@ -29,13 +30,13 @@ const SubHeroCard = ({ post }: SubHeroCardProps) => {
           {categoryName}
         </span>
       </div>
-      
+
       <div className="p-4 flex-grow flex flex-col justify-between">
         <h3 className="font-heading font-bold text-sm sm:text-base text-neutral-900 leading-snug group-hover:text-[#dc2626] transition-colors line-clamp-2">
-          {post.title}
+          {post.title}...
         </h3>
         <span className="text-[10px] font-bold text-neutral-450 uppercase mt-3 block tracking-wide">
-          {post.publishedAt}
+          {timeAgo(post.publishedAt)}
         </span>
       </div>
     </Link>

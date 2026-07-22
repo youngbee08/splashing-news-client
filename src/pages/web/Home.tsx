@@ -178,7 +178,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="bg-red-50/15 border border-red-150/40 rounded-lg p-6">
+          {/* <div className="bg-red-50/15 border border-red-150/40 rounded-lg p-6">
             <h3 className="font-heading font-black text-lg text-neutral-900 mb-2">
               Splashingnews Morning Brief
             </h3>
@@ -203,7 +203,7 @@ const Home = () => {
             <span className="text-[10px] text-neutral-450 font-medium text-center block mt-3">
               Join 125,000+ professionals and policy makers.
             </span>
-          </div>
+          </div> */}
         </div>
       </section>
 

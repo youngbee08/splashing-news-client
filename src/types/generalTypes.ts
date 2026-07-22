@@ -117,6 +117,7 @@ export interface PostQueryOptions {
   search?: string;
   sort?: string;
   category?: string;
+  status?: string;
 }
 
 export interface PaginatedPostsResponse {
