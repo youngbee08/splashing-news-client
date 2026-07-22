@@ -23,6 +23,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
     useState<DashboardMetrics>(EMPTY_METRICS);
 
   const logout = useCallback(() => {
+    const logoutToast = toast.loading("Logging out");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("dashboardMetrics");
@@ -30,6 +31,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
     setToken("");
     setIsAuthenticated(false);
     setDashboardMetrics(EMPTY_METRICS);
+    toast.dismiss(logoutToast);
     toast.success("Logged out successfully");
     window.location.href = "/auth/admin-login";
   }, []);

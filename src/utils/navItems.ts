@@ -12,9 +12,6 @@ const navItems: NavItem[] = [
   // CMS Nav Items
   { name: "Dashboard", path: "/admin/overview", type: "cms", icon: "Dashboard" },
   { name: "Posts", path: "/admin/posts", type: "cms", icon: "Posts" },
-
-  // CMS Bottom Nav Items
-  { name: "Sign Out", path: "/auth/admin-login", type: "cms", icon: "SignOut", isBottom: true },
 ];
 
 export default navItems;

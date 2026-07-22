@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
-// import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-// import axios from "axios";
 import loginBanner from "../../../assets/images/loginBanner.jpg";
 import { login } from "../../../utils/apiUtility";
 import { useUserContext } from "../../../hooks/UseUserContext";
@@ -54,9 +52,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-white">
-      {/* Left Column: Login Form */}
       <div className="w-full lg:w-[45%] xl:w-[40%] flex flex-col justify-between p-6 sm:p-12 md:p-16 lg:p-10 xl:p-16 min-h-screen bg-white">
-        {/* Form Container */}
         <div className="w-full max-w-md mx-auto my-auto py-8 flex flex-col justify-center gap-6">
           <div className="space-y-2">
             <h1 className="text-3xl font-heading font-black tracking-tight text-neutral-900">
@@ -73,7 +69,6 @@ const Login: React.FC = () => {
             onSubmit={formik.handleSubmit}
             className="flex flex-col gap-5 mt-4"
           >
-            {/* Email Field */}
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold uppercase tracking-wider text-neutral-600 font-body block">
                 Email Address
@@ -82,7 +77,7 @@ const Login: React.FC = () => {
                 <input
                   type="email"
                   name="email"
-                  placeholder="editor@splashingnews.com"
+                  placeholder="email@example.com"
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -101,7 +96,6 @@ const Login: React.FC = () => {
               )}
             </div>
 
-            {/* Password Field */}
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center">
                 <label className="text-xs font-bold uppercase tracking-wider text-neutral-600 font-body block">
@@ -142,7 +136,6 @@ const Login: React.FC = () => {
               )}
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={!formik.isValid || loginMutation.isPending}
@@ -178,28 +171,23 @@ const Login: React.FC = () => {
           </form>
         </div>
 
-        {/* Footer */}
         <div className="text-xs text-neutral-450 font-body">
           &copy; {new Date().getFullYear()} Splashing News. All rights reserved.
         </div>
       </div>
 
-      {/* Right Column: Premium Banner Cover */}
       <div className="hidden lg:flex lg:w-[55%] xl:w-[60%] relative overflow-hidden bg-neutral-950 items-center justify-center">
-        {/* Background Image with Zoom Transition */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
           <img
             src={loginBanner}
             alt="Splashing News Editorial Room"
             className="w-full h-full object-cover transition-transform duration-10000 ease-out hover:scale-105 select-none"
           />
-          {/* Multi-layered gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-neutral-950/30 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/40 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-neutral-950/50" />
+          <div className="absolute inset-0 bg-linear-to-t from-neutral-950/80 via-neutral-950/30 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-neutral-950/40 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-neutral-950/50" />
         </div>
 
-        {/* Premium Content Overlay */}
         <div className="absolute bottom-16 left-16 right-16 max-w-xl text-white z-10 space-y-6">
           <div className="space-y-4">
             <h2 className="text-4xl xl:text-5xl font-heading font-bold leading-tight tracking-tight text-white!">
