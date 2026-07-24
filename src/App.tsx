@@ -12,9 +12,14 @@ import AddPost from "./pages/cms/dashboard/AddPost";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import OtherNews from "./pages/web/OtherNews";
 
+import TermsAndConditions from "./pages/web/TermsAndConditions";
+import PrivacyPolicy from "./pages/web/PrivacyPolicy";
+import { Analytics } from "@vercel/analytics/react";
+
 const App = () => {
   return (
     <>
+      <Analytics />
       <Toaster richColors closeButton />
 
       <Routes>
@@ -25,6 +30,10 @@ const App = () => {
           <Route path="/news" element={<News />} />
           <Route path="/articles/:cat" element={<OtherNews />} />
           <Route path="/post/:slug" element={<PostDetail />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>

@@ -64,6 +64,30 @@ const Footer = () => {
               ))}
             </ul>
           </div>
+
+          <div>
+            <h4 className="text-white! text-xs font-bold uppercase tracking-wider mb-4 font-heading border-l-2 border-[#dc2626] pl-2.5">
+              Legal & Transparency
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <Link
+                  to="/terms-and-conditions"
+                  className="text-neutral-400 hover:text-white hover:translate-x-0.5 transition-all duration-150 inline-block font-medium"
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/privacy-policy"
+                  className="text-neutral-400 hover:text-white hover:translate-x-0.5 transition-all duration-150 inline-block font-medium"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="border-t border-neutral-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-neutral-500">
@@ -82,6 +106,12 @@ const Footer = () => {
           </p>
 
           <div className="flex items-center gap-6">
+            <Link to="/terms-and-conditions" className="hover:text-white transition-colors">
+              Terms
+            </Link>
+            <Link to="/privacy-policy" className="hover:text-white transition-colors">
+              Privacy
+            </Link>
             <button
               onClick={scrollToTop}
               type="button"
