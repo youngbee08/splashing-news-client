@@ -4,7 +4,6 @@ import {
   FiShield,
   FiLock,
   FiEye,
-  FiDatabase,
   FiUserCheck,
   FiGlobe,
   FiCheckCircle,
@@ -14,7 +13,6 @@ import {
   FiCheck,
   FiMail,
   FiArrowUpRight,
-  FiHelpCircle,
   FiFileText,
 } from "react-icons/fi";
 import { toast } from "sonner";
