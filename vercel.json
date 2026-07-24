@@ -2,6 +2,13 @@
   "rewrites": [
     {
       "source": "/post/:slug*",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot|TelegramBot|Slackbot|discordbot|SkypeUriPreview|ia_archiver|bot|crawler|spider).*"
+        }
+      ],
       "destination": "https://splashing-news-server.onrender.com/post/:slug*"
     },
     {
