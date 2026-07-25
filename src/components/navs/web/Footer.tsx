@@ -106,12 +106,6 @@ const Footer = () => {
           </p>
 
           <div className="flex items-center gap-6">
-            <Link to="/terms-and-conditions" className="hover:text-white transition-colors">
-              Terms
-            </Link>
-            <Link to="/privacy-policy" className="hover:text-white transition-colors">
-              Privacy
-            </Link>
             <button
               onClick={scrollToTop}
               type="button"
