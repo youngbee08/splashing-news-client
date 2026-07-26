@@ -10,6 +10,8 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { PostDetailSkeleton } from "../../components/skeletons/CardSkeleton";
 import { timeAgo } from "../../utils/formatterUtility";
+import LatestNewsCard from "../../components/cards/LatestNewsCard";
+import type { Post } from "../../types/generalTypes";
 
 const commentValidationSchema = yup.object({
   name: yup.string().required("Your name is required"),
@@ -85,6 +87,8 @@ const PostDetail = () => {
     ? post.comments.length
     : post.commentsCount || 0;
 
+  const relatedPosts: Post[] = post.relatedPosts || [];
+
   const handleShare = () => {
     if (navigator.share) {
       navigator
@@ -106,7 +110,7 @@ const PostDetail = () => {
     window.open(
       `https://api.whatsapp.com/send?text=${encodeURIComponent(`${text} - ${url}`)}`,
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   };
 
@@ -184,18 +188,23 @@ const PostDetail = () => {
           {post.excerpt}
         </p>
 
-        <div className="flex items-center justify-between gap-2 text-xs font-semibold text-neutral-450 border-t border-b border-neutral-100 py-3.5 mt-4">
-          <span className="truncate">By Splashing News</span>
-          <div className="flex items-center gap-3 shrink-0 text-neutral-500 font-medium">
-            <span className="flex items-center gap-1" title="Views">
+        <div className="flex flex-wrap items-center justify-between gap-y-2.5 gap-x-4 text-xs font-semibold border-t border-b border-neutral-100 py-3.5 mt-4">
+          <div className="flex items-center gap-2 truncate text-neutral-600">
+            <span className="font-bold text-neutral-800">
+              By Splashing News
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3.5 shrink-0 text-neutral-500 font-medium">
+            <span className="flex items-center gap-1.5" title="Views">
               <FiEye className="w-3.5 h-3.5" />
               <span>{post.views || 0}</span>
             </span>
-            <span className="flex items-center gap-1" title="Comments">
+            <span className="flex items-center gap-1.5" title="Comments">
               <FiMessageCircle className="w-3.5 h-3.5" />
               <span>{commentsCount}</span>
             </span>
-            <span className="flex items-center gap-1" title="Likes">
+            <span className="flex items-center gap-1.5" title="Likes">
               <FiHeart className="w-3.5 h-3.5 text-[#dc2626]" />
               <span>{post.likes || 0}</span>
             </span>
@@ -244,17 +253,17 @@ const PostDetail = () => {
         </div>
       )}
 
-      <div className="flex items-center justify-between border-y border-neutral-150 py-4 my-8">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-y border-neutral-150 py-4 my-8">
         <button
           onClick={handleLikePost}
           type="button"
-          className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full border text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
             postLiked
               ? "bg-red-50/50 border-red-200 text-[#dc2626]"
               : "bg-white border-neutral-200 text-neutral-650 hover:bg-neutral-50"
           }`}
         >
-          {postLiked ? <FaHeart /> : <FaRegHeart />}
+          {postLiked ? <FaHeart className="text-[#dc2626]" /> : <FaRegHeart />}
           <span>{post.likes} Likes</span>
         </button>
 
@@ -262,16 +271,18 @@ const PostDetail = () => {
           <button
             onClick={handleShare}
             type="button"
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-650 hover:bg-neutral-50 rounded-full text-sm font-semibold transition-all cursor-pointer"
+            className="flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-white border border-neutral-200 text-neutral-650 hover:bg-neutral-50 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer"
           >
             <FaShareAlt />
-            <span>Share Post</span>
+            <span>
+              Share<span className="hidden sm:inline"> Post</span>
+            </span>
           </button>
 
           <button
             onClick={handleWhatsAppShare}
             type="button"
-            className="flex items-center gap-2 px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full text-sm font-semibold transition-all shadow-xs cursor-pointer"
+            className="flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full text-xs sm:text-sm font-semibold transition-all shadow-xs cursor-pointer shrink-0"
             title="Share on WhatsApp"
           >
             <FaWhatsapp className="w-4 h-4" />
@@ -370,6 +381,25 @@ const PostDetail = () => {
                   </p>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {relatedPosts.length > 0 && (
+        <div className="space-y-6 pt-10 border-t border-neutral-200 mt-12">
+          <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
+            <h3 className="text-xl font-heading font-extrabold text-neutral-900">
+              Related Posts
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {relatedPosts.map((relatedPost) => (
+              <LatestNewsCard
+                key={relatedPost._id || relatedPost.id}
+                post={relatedPost}
+              />
             ))}
           </div>
         </div>

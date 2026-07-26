@@ -10,6 +10,7 @@ export interface Category {
 
 export interface Post {
   _id: string;
+  id?: string;
   title: string;
   slug: string;
   excerpt: string;
@@ -23,6 +24,7 @@ export interface Post {
   likes: number;
   comments?: Comment[];
   commentsCount?: number;
+  relatedPosts?: Post[];
   isFeatured: boolean;
   publishedAt: string;
   createdAt?: string;

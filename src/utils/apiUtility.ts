@@ -50,7 +50,14 @@ export const getPosts = async (
 
 export const getPostBySlug = async (slug: string): Promise<Post> => {
   const res = await api.get(`/posts/${slug}`);
-  return res.data.data || res.data;
+  const data = res.data.data || res.data;
+  if (data && data.post && Array.isArray(data.relatedPosts)) {
+    return {
+      ...data.post,
+      relatedPosts: data.relatedPosts,
+    };
+  }
+  return data;
 };
 
 export const createPost = async (data: CreatePostInput): Promise<Post> => {
