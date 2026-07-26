@@ -4,8 +4,8 @@ import * as yup from "yup";
 import { usePostContext } from "../../hooks/UsePostContext";
 import { usePostBySlugQuery } from "../../hooks/usePostQueries";
 import { toast } from "sonner";
-import { FaHeart, FaRegHeart, FaShareAlt } from "react-icons/fa";
-import { FiChevronDown } from "react-icons/fi";
+import { FaHeart, FaRegHeart, FaShareAlt, FaWhatsapp } from "react-icons/fa";
+import { FiChevronDown, FiEye, FiMessageCircle, FiHeart } from "react-icons/fi";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { PostDetailSkeleton } from "../../components/skeletons/CardSkeleton";
@@ -81,6 +81,10 @@ const PostDetail = () => {
     );
   }
 
+  const commentsCount = Array.isArray(post.comments)
+    ? post.comments.length
+    : post.commentsCount || 0;
+
   const handleShare = () => {
     if (navigator.share) {
       navigator
@@ -94,6 +98,16 @@ const PostDetail = () => {
       navigator.clipboard.writeText(window.location.href);
       toast.info("Link copied to clipboard!");
     }
+  };
+
+  const handleWhatsAppShare = () => {
+    const url = window.location.href;
+    const text = post.title;
+    window.open(
+      `https://api.whatsapp.com/send?text=${encodeURIComponent(`${text} - ${url}`)}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
   };
 
   const handleLikePost = () => {
@@ -169,6 +183,24 @@ const PostDetail = () => {
         <p className="text-neutral-500 text-base leading-relaxed font-medium">
           {post.excerpt}
         </p>
+
+        <div className="flex items-center justify-between gap-2 text-xs font-semibold text-neutral-450 border-t border-b border-neutral-100 py-3.5 mt-4">
+          <span className="truncate">By Splashing News</span>
+          <div className="flex items-center gap-3 shrink-0 text-neutral-500 font-medium">
+            <span className="flex items-center gap-1" title="Views">
+              <FiEye className="w-3.5 h-3.5" />
+              <span>{post.views || 0}</span>
+            </span>
+            <span className="flex items-center gap-1" title="Comments">
+              <FiMessageCircle className="w-3.5 h-3.5" />
+              <span>{commentsCount}</span>
+            </span>
+            <span className="flex items-center gap-1" title="Likes">
+              <FiHeart className="w-3.5 h-3.5 text-[#dc2626]" />
+              <span>{post.likes || 0}</span>
+            </span>
+          </div>
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-xl shadow-xs border border-neutral-100 aspect-[16/9] bg-neutral-50">
@@ -216,7 +248,7 @@ const PostDetail = () => {
         <button
           onClick={handleLikePost}
           type="button"
-          className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold transition-all cursor-pointer ${
             postLiked
               ? "bg-red-50/50 border-red-200 text-[#dc2626]"
               : "bg-white border-neutral-200 text-neutral-650 hover:bg-neutral-50"
@@ -226,14 +258,26 @@ const PostDetail = () => {
           <span>{post.likes} Likes</span>
         </button>
 
-        <button
-          onClick={handleShare}
-          type="button"
-          className="flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-650 hover:bg-neutral-50 rounded-full text-sm font-semibold transition-all"
-        >
-          <FaShareAlt />
-          Share Post
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleShare}
+            type="button"
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-650 hover:bg-neutral-50 rounded-full text-sm font-semibold transition-all cursor-pointer"
+          >
+            <FaShareAlt />
+            <span>Share Post</span>
+          </button>
+
+          <button
+            onClick={handleWhatsAppShare}
+            type="button"
+            className="flex items-center gap-2 px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full text-sm font-semibold transition-all shadow-xs cursor-pointer"
+            title="Share on WhatsApp"
+          >
+            <FaWhatsapp className="w-4 h-4" />
+            <span>WhatsApp</span>
+          </button>
+        </div>
       </div>
 
       {post.comments && (
