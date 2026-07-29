@@ -9,6 +9,13 @@ const CMSLayout = () => {
    useEffect(() => {
      window.scrollTo({ top: 0, behavior: "smooth" });
    }, [location]);
+
+   useEffect(() => {
+     const scripts = document.querySelectorAll(
+       'script[src*="adsbygoogle"], script[src*="pagead2.googlesyndication.com"]'
+     );
+     scripts.forEach((script) => script.remove());
+   }, [location]);
   return (
     <div className="min-h-screen flex bg-white font-sans text-neutral-800 antialiased relative">
       {/* Desktop Left Sidebar */}

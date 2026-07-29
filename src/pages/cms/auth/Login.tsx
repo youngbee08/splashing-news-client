@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,13 @@ import { getErrorMessage } from "../../../services/axios";
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const scripts = document.querySelectorAll(
+      'script[src*="adsbygoogle"], script[src*="pagead2.googlesyndication.com"]'
+    );
+    scripts.forEach((script) => script.remove());
+  }, []);
 
   const validationSchema = yup.object({
     email: yup.string().required("Email is required"),
