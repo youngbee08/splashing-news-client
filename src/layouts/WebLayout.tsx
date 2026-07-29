@@ -9,6 +9,28 @@ const WebLayout = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location]);
 
+  useEffect(() => {
+    const scriptId = "google-adsense-script";
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+
+    if (!script) {
+      script = document.createElement("script");
+      script.id = scriptId;
+      script.async = true;
+      script.src =
+        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7445228055826836";
+      script.crossOrigin = "anonymous";
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      const existingScript = document.getElementById(scriptId);
+      if (existingScript) {
+        existingScript.remove();
+      }
+    };
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#fcfcfd]">
       {/* Main Header */}
